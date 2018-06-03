@@ -1,6 +1,6 @@
 {
   "name": "react-toast-notifications",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A toast notification system for react.",
   "main": "dist/index.js",
   "license": "MIT",
