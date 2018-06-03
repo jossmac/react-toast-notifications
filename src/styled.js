@@ -69,15 +69,20 @@ const Content = styled.div({
   minHeight: 60,
   padding: `${gutter}px ${gutter * 1.5}px`,
 });
-const Countdown = styled.div({
+
+// NOTE: invoke animation when NOT `autoDismiss` with opacity of 0 to avoid a
+// paint bug in FireFox.
+// https://bugzilla.mozilla.org/show_bug.cgi?id=625289
+const Countdown = styled.div(({ opacity }) => ({
   animation: `${shrink} ${autoDismissDuration}ms linear`,
   backgroundColor: 'rgba(0,0,0,0.1)',
   bottom: 0,
   height: 0,
   left: 0,
+  opacity,
   position: 'absolute',
   width: '100%',
-});
+}));
 const Icon = ({ appearance, autoDismiss }) => {
   const meta = appearances[appearance];
   const Glyph = meta.icon;
@@ -98,7 +103,7 @@ const Icon = ({ appearance, autoDismiss }) => {
         width: 30,
       }}
     >
-      {autoDismiss ? <Countdown /> : null}
+      <Countdown opacity={autoDismiss ? 1 : 0} />
       <Glyph css={{ position: 'relative', zIndex: 1 }} />
     </div>
   );
