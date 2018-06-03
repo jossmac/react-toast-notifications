@@ -1,0 +1,13 @@
+# Misc
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# build
+node_modules
+dist
+examples/dist
