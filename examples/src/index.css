@@ -4,8 +4,6 @@
   ==============================
 */
 
-@import url('https://fonts.googleapis.com/css?family=Sunflower');
-
 body {
   -moz-font-feature-settings: 'liga' on;
   -moz-osx-font-smoothing: grayscale;
@@ -13,7 +11,8 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background: #fafbfc;
   color: #253858;
-  font-family: 'Sunflower', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: 400;

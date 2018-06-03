@@ -29,6 +29,7 @@ export const Repo = ({ isLocked, ...props }) => (
     css={{
       borderBottom: '1px solid rgba(0, 0, 0, 0.3)',
       color: 'inherit',
+      fontWeight: 500,
       paddingBottom: 1,
       textDecoration: 'none',
 
@@ -60,7 +61,7 @@ export const Icon = styled.div({
 export const Title = styled.h1({
   display: 'inline',
   fontSize: 'inherit',
-  fontWeight: 500,
+  fontWeight: 400,
   letterSpacing: '-0.025em',
   margin: 0,
 });

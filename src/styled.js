@@ -1,14 +1,15 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Children, Component } from 'react';
 import styled, { keyframes } from 'react-emotion';
 import { Transition, TransitionGroup } from 'react-transition-group';
 
 import { CheckIcon, FlameIcon, InfoIcon, CloseIcon } from './icons';
 
 const borderRadius = 4;
-const gridSize = 8;
+const gutter = 8;
 const autoDismissDuration = 5000;
+const toastWidth = 360;
 const shrink = keyframes`from { height: 100%; } to { height: 0% }`;
 
 const A11yText = ({ tag: Tag, ...props }) => (
@@ -55,7 +56,7 @@ const Button = styled.div({
   cursor: 'pointer',
   flexShrink: 0,
   opacity: 0.5,
-  padding: `${gridSize}px ${gridSize * 1.5}px`,
+  padding: `${gutter}px ${gutter * 1.5}px`,
   transition: 'opacity 150ms',
 
   ':hover': { opacity: 1 },
@@ -66,7 +67,7 @@ const Content = styled.div({
   fontSize: 14,
   lineHeight: 1.4,
   minHeight: 60,
-  padding: `${gridSize}px ${gridSize * 1.5}px`,
+  padding: `${gutter}px ${gutter * 1.5}px`,
 });
 const Countdown = styled.div({
   animation: `${shrink} ${autoDismissDuration}ms linear`,
@@ -89,8 +90,8 @@ const Icon = ({ appearance, autoDismiss }) => {
         borderBottomLeftRadius: borderRadius,
         color: meta.bg,
         flexShrink: 0,
-        paddingBottom: gridSize,
-        paddingTop: gridSize,
+        paddingBottom: gutter,
+        paddingTop: gutter,
         position: 'relative',
         overflow: 'hidden',
         textAlign: 'center',
@@ -116,9 +117,10 @@ const ToastElement = styled.div(({ appearance, transitionState }) => ({
   boxShadow: '0 3px 8px rgba(0, 0, 0, 0.175)',
   color: appearances[appearance].text,
   display: 'flex',
-  marginBottom: gridSize,
+  marginBottom: gutter,
   transition: `transform ${transitionDuration} cubic-bezier(0.2, 0, 0, 1)`,
-  width: 360,
+  transform: 'translate3d(110%,0,0)',
+  width: toastWidth,
   ...toastStates[transitionState],
 }));
 
@@ -127,14 +129,17 @@ export const ToastContainer = ({ children }: *) => (
     css={{
       boxSizing: 'border-box',
       maxHeight: '100%',
+      overflowX: 'hidden',
       overflowY: 'auto',
-      padding: gridSize,
+      padding: gutter,
+      pointerEvents: Children.count(children) ? 'auto' : 'none',
       position: 'fixed',
       right: 0,
       top: 0,
+      width: toastWidth + gutter * 2,
     }}
   >
-    <TransitionGroup>{children}</TransitionGroup>
+    <TransitionGroup component={null}>{children}</TransitionGroup>
   </div>
 );
 
