@@ -66,7 +66,7 @@ const Content = styled.div({
   flexGrow: 1,
   fontSize: 14,
   lineHeight: 1.4,
-  minHeight: 60,
+  minHeight: 40,
   padding: `${gutter}px ${gutter * 1.5}px`,
 });
 

@@ -1,1 +1,5 @@
-export { ToastProvider, Toasts, withToastUtils } from './ToastProvider';
+export {
+  ToastConsumer,
+  ToastProvider,
+  withToastManager,
+} from './ToastProvider';
