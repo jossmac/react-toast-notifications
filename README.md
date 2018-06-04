@@ -5,18 +5,18 @@ A toast notification system for react.
 https://jossmac.github.io/react-toast-notifications
 
 ```jsx
-import { ToastProvider, withToastUtils } from 'react-toast-notifications';
+import { ToastProvider, withToastManager } from 'react-toast-notifications';
 
 class FormComponent extends React.Component {
   onSubmit = () => {
-    const { toast } = this.props;
+    const { toastManager } = this.props;
 
     if (validation.error) {
-      toast.addToast(`Something went wrong: "${validation.error.message}"`, {
+      toastManager.add(`Something went wrong: "${validation.error.message}"`, {
         appearance: 'error',
       });
     } else if (validation.success) {
-      toast.addToast('Saved Successfully', { appearance: 'success' });
+      toastManager.add('Saved Successfully', { appearance: 'success' });
     }
   };
   render() {
@@ -24,7 +24,7 @@ class FormComponent extends React.Component {
   }
 }
 
-const FormWithToasts = withToastUtils(FormComponent);
+const FormWithToasts = withToastManager(FormComponent);
 
 const App = () => (
   <ToastProvider>

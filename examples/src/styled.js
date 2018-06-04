@@ -1,6 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'react-emotion';
+import SyntaxHighlighter, {
+  registerLanguage,
+} from 'react-syntax-highlighter/prism-light';
+import jsx from 'react-syntax-highlighter/languages/prism/jsx';
+import { coy } from 'react-syntax-highlighter/styles/prism';
+import { colors } from '../../src/styled';
+
+registerLanguage('jsx', jsx);
+
 const gutter = 15;
+const containerWidth = 940;
 
 // styled components
 // ------------------------------
@@ -15,27 +25,81 @@ export const Container = props => (
       justifyContent: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
-      maxWidth: 410,
-      padding: '60px 15px',
-      textAlign: 'center',
+      maxWidth: containerWidth,
+      padding: '30px 15px',
+
+      '@media (min-width: 480px)': {
+        padding: '30px',
+      },
     }}
     {...props}
   />
 );
+export const Body = props => (
+  <div
+    css={{
+      alignItems: 'center',
+      display: 'flex',
+      flex: 1,
+      justifyContent: 'space-between',
+      marginBottom: '1em',
+      marginTop: '1em',
+    }}
+    {...props}
+  />
+);
+const activeButtonBg = {
+  info: 'rgb(190, 218, 255)',
+  success: 'rgb(194, 237, 198)',
+  error: 'rgb(243, 198, 198)',
+};
+const activeButtonTxt = {
+  info: 'rgb(23, 79, 153)',
+  success: 'rgb(31, 116, 38)',
+  error: 'rgb(128, 40, 40)',
+};
+
+export const Button = styled.button(({ appearance }) => ({
+  background: '#EBECF0',
+  border: 0,
+  borderRadius: 4,
+  color: 'inherit',
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  fontSize: 'inherit',
+  paddingLeft: '1em',
+  paddingRight: '1em',
+  lineHeight: '2.2em',
+
+  ':hover, :focus': {
+    background: '#DFE1E5',
+    outline: 0,
+  },
+  ':active': {
+    background: activeButtonBg[appearance],
+    color: activeButtonTxt[appearance],
+  },
+}));
 
 export const Repo = ({ isLocked, ...props }) => (
   <a
     target="_blank"
     css={{
-      borderBottom: '1px solid rgba(0, 0, 0, 0.3)',
-      color: 'inherit',
-      fontWeight: 500,
-      paddingBottom: 1,
-      textDecoration: 'none',
+      alignItems: 'center',
+      display: 'flex',
 
       ':hover': {
-        borderBottomColor: 'rgba(0, 0, 0, 0.6)',
         textDecoration: 'none',
+
+        span: { borderBottomColor: '#B3BAC5' },
+      },
+      span: {
+        borderBottom: '1px solid transparent',
+        color: 'inherit',
+        fontWeight: 500,
+        paddingBottom: 1,
+        textDecoration: 'none',
+        transition: 'border-color 200ms',
       },
     }}
     {...props}
@@ -48,22 +112,35 @@ export const Repo = ({ isLocked, ...props }) => (
   ==============================
 */
 
-export const Footer = styled.footer({ fontSize: 14 });
-export const Header = styled.header({ marginBottom: '2em' });
+export const Footer = styled.footer({
+  color: '#97A0AF',
+  display: 'flex',
+  justifyContent: 'space-between',
+  fontSize: 14,
+
+  '@media (max-width: 480px)': {
+    flexDirection: 'column',
+  },
+});
+export const Header = styled.header({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+});
 export const Icon = styled.div({
-  fontSize: 64,
-  height: 64,
-  lineHeight: 1,
-  margin: '0 auto 0.5em',
+  fontSize: 32,
+  lineHeight: 1.2,
   position: 'relative',
-  width: 64,
+  height: 32,
+  width: 32,
+  marginRight: '0.5em',
 });
 export const Title = styled.h1({
-  display: 'inline',
-  fontSize: 'inherit',
-  fontWeight: 400,
+  fontSize: '2em',
+  fontWeight: 'bold',
   letterSpacing: '-0.025em',
-  margin: 0,
+  lineHeight: 1.1,
+  margin: '0 0 1em',
 });
 export const Code = styled.code({
   // backgroundColor: 'rgba(0, 0, 0, 0.09)',
@@ -79,3 +156,74 @@ export const Code = styled.code({
   position: 'relative',
   zIndex: -1,
 });
+
+// Github Logo
+
+export const GithubAnchor = styled.a({
+  color: '#97A0AF',
+  transition: 'color 200ms',
+  ':hover, :focus': {
+    color: '#253858',
+  },
+});
+export const GithubLogo = props => (
+  <GithubAnchor {...props}>
+    <svg
+      height="32"
+      viewBox="0 0 16 16"
+      version="1.1"
+      width="32"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        style={{ fill: 'currentColor' }}
+        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+      />
+    </svg>
+  </GithubAnchor>
+);
+
+// ==============================
+// Syntax Highlighter
+// ==============================
+
+export const CodeExample = styled.div({
+  maxHeight: '100%',
+  width: '50%',
+
+  [`@media (max-width: ${containerWidth}px)`]: {
+    display: 'none',
+  },
+});
+
+export const CodeBlock = ({
+  children,
+  style,
+  ...props
+}: {
+  children: Node,
+}) => {
+  return (
+    <SyntaxHighlighter
+      language="jsx"
+      style={coy}
+      customStyle={{
+        backgroundColor: '#FAFBFC',
+        border: '1px solid #F4F5F7',
+        borderRadius: 4,
+        fontSize: 12,
+        overflowX: 'auto',
+        margin: 0,
+        marginBottom: 0,
+        maxHeight: '100%',
+        padding: 12,
+        WebkitOverflowScrolling: 'touch',
+        ...style,
+      }}
+      {...props}
+    >
+      {children}
+    </SyntaxHighlighter>
+  );
+};

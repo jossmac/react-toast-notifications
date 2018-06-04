@@ -1,8 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { render } from 'react-dom';
+import { RadioGroup, Radio } from 'react-radios';
 
 import {
   Anchor,
+  Body,
+  Button,
   Code,
   Container,
   Footer,
@@ -10,9 +13,36 @@ import {
   Icon,
   Repo,
   Title,
+  GithubLogo,
+  CodeBlock,
+  CodeExample,
 } from './styled';
 import './index.css';
-import { ToastProvider, withToastUtils } from '../../src';
+import ConnectivityListener from './ConnectivityListener';
+import { ToastProvider, withToastManager } from '../../src';
+
+const exampleCode = ({
+  appearance,
+  autoDismiss,
+  toastContent,
+}) => `import { ToastProvider, withToastManager } from 'react-toast-notifications';
+
+const Demo = ({ toastContent, toastManager }) => (
+  <Button onClick={toastManager.add(toastContent, {
+    appearance: '${appearance}',
+    autoDismiss: ${autoDismiss},
+  })}>
+    Add Toast
+  </Button>
+);
+
+const ToastDemo = withToastManager(Demo);
+
+const App = () => (
+  <ToastProvider>
+    <ToastDemo />
+  </ToastProvider>
+);`;
 
 // data
 // ------------------------------
@@ -40,102 +70,148 @@ function getRandom() {
 // Toast Buttons
 // ------------------------------
 
-const appearances = ['Info', 'Success', 'Error'];
+const appearances = [
+  { value: 'info', label: 'Info' },
+  { value: 'success', label: 'Success' },
+  { value: 'error', label: 'Error' },
+];
 
 class ToastButtons extends Component {
-  state = { autoDismiss: true };
-  toggle = event => this.setState({ autoDismiss: event.target.checked });
-  render() {
-    const { toast } = this.props;
-    const { autoDismiss } = this.state;
-    return (
-      <div css={{ marginBottom: '1em', marginTop: '1em' }}>
-        {appearances.map(a => {
-          const appearance = a.toLowerCase();
-          const onClick = toast.addToast(getRandom(), {
-            appearance,
-            autoDismiss,
-          });
+  state = {
+    appearance: appearances[0].value,
+    autoDismiss: true,
+    toastContent: getRandom(),
+  };
+  toggleAutoDismiss = event => {
+    this.setState({ autoDismiss: event.target.checked });
+  };
+  add = () => {
+    const { toastManager } = this.props;
+    const { appearance, autoDismiss } = this.state;
 
-          return (
-            <button key={a} onClick={onClick}>
-              {a}
-            </button>
-          );
-        })}
+    toastManager.add(getRandom(), {
+      appearance,
+      autoDismiss,
+    });
+  };
+  handleAppearanceChange = appearance => {
+    this.setState({ appearance });
+  };
+  render() {
+    const { appearance, autoDismiss } = this.state;
+    return (
+      <div style={{ alignItems: 'center', display: 'flex' }}>
         <div
           css={{
-            alignItems: 'center',
             display: 'flex',
-            fontSize: '0.75em',
-            justifyContent: 'center',
-            marginTop: '1em',
+            flexDirection: 'column',
+            flex: 1,
+            paddingRight: '1em',
           }}
         >
-          <input
-            id="auto-dismiss-checkbox"
-            type="checkbox"
-            onChange={this.toggle}
-            style={{ marginRight: '0.5em' }}
-            checked={autoDismiss}
-          />
-          <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
+          <Title>Let users know what&apos;s happening in your app.</Title>
+          <div css={{ marginBottom: '1em', marginTop: '1em' }}>
+            <RadioGroup
+              value={this.state.appearance}
+              onChange={this.handleAppearanceChange}
+            >
+              {appearances.map(a => (
+                <label
+                  key={a.value}
+                  css={{
+                    alignItems: 'center',
+                    display: 'inline-flex',
+                    marginRight: '1em',
+                  }}
+                >
+                  <Radio value={a.value} />
+                  <div css={{ marginLeft: '0.25em' }}>{a.label}</div>
+                </label>
+              ))}
+            </RadioGroup>
+          </div>
+          <div css={{ alignItems: 'center', display: 'flex' }}>
+            <Button appearance={appearance} onClick={this.add}>
+              Add Toast
+            </Button>
+            <div
+              css={{
+                alignItems: 'center',
+                display: 'flex',
+                fontSize: '0.85em',
+                marginLeft: '1em',
+              }}
+            >
+              <input
+                id="auto-dismiss-checkbox"
+                type="checkbox"
+                onChange={this.toggleAutoDismiss}
+                style={{ marginRight: '0.5em' }}
+                checked={autoDismiss}
+              />
+              <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
+            </div>
+          </div>
         </div>
+        <CodeExample>
+          <CodeBlock>{exampleCode(this.state)}</CodeBlock>
+        </CodeExample>
       </div>
     );
   }
 }
 
-const Toasts = withToastUtils(ToastButtons);
+const Toasts = withToastManager(ToastButtons);
 
 // example
 // ------------------------------
 
-class App extends Component {
-  state = { paragraph: null };
-  toggle = () => {
-    const paragraph = getRandom();
-    this.setState(state => ({ paragraph: state.paragraph ? null : paragraph }));
-  };
-  update = () => {
-    const paragraph = getRandom();
-    this.setState({ paragraph });
-  };
-  render() {
-    const { paragraph } = this.state;
-    return (
-      <ToastProvider>
-        <Container>
+function App() {
+  const repoUrl = 'https://github.com/jossmac/react-toast-notifications';
+  return (
+    <ToastProvider>
+      <ConnectivityListener />
+      <Container>
+        <Header>
+          <Repo href={repoUrl}>
+            <Icon role="img">🍞</Icon>
+            <span>react-toast-notifications</span>
+          </Repo>
+          <GithubLogo href={repoUrl} target="_blank" />
+        </Header>
+
+        <Body>
+          <Toasts />
+        </Body>
+
+        <Footer>
           <div>
-            <Header>
-              <Icon role="img" className="animate-dropin">
-                🍞
-              </Icon>
-              <Title>
-                Let users know what&apos;s happening in your app with{' '}
-                <Repo href="https://github.com/jossmac/react-toast-notifications">
-                  react-toast-notifications
-                </Repo>
-              </Title>
-            </Header>
-
-            <Toasts />
-
-            <Footer>
-              <span> by </span>
-              <a href="https://twitter.com/jossmackison" target="_blank">
-                @jossmac
-              </a>{' '}
-              &middot; paragraphs from{' '}
-              <a href="http://www.cupcakeipsum.com" target="_blank">
-                Cupcake Ipsum
-              </a>
-            </Footer>
+            <span>by </span>
+            <a href="https://twitter.com/jossmackison" target="_blank">
+              @jossmac
+            </a>{' '}
+            <span>for </span>
+            <a href="https://twitter.com/keystonejs" target="_blank">
+              @keystonejs
+            </a>{' '}
+            on{' '}
+            <a
+              href="https://www.npmjs.com/package/react-toast-notifications"
+              target="_blank"
+            >
+              npm
+            </a>
           </div>
-        </Container>
-      </ToastProvider>
-    );
-  }
+          <div>
+            paragraphs from{' '}
+            <a href="http://www.cupcakeipsum.com" target="_blank">
+              Cupcake Ipsum
+            </a>{' '}
+          </div>
+        </Footer>
+      </Container>
+    </ToastProvider>
+  );
 }
 
 // render
