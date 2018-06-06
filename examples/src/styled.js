@@ -5,15 +5,41 @@ import SyntaxHighlighter, {
 } from 'react-syntax-highlighter/prism-light';
 import jsx from 'react-syntax-highlighter/languages/prism/jsx';
 import { coy } from 'react-syntax-highlighter/styles/prism';
-import { colors } from '../../src/styled';
+import * as colors from '../../src/colors';
 
 registerLanguage('jsx', jsx);
 
 const gutter = 15;
-const containerWidth = 940;
+const containerWidth = 960;
 
 // styled components
 // ------------------------------
+
+// const sections = {
+//   intro: { bg: 'white', text: 'inherit' },
+//   config: { bg: colors.N800, text: colors.N40 },
+//   example: { bg: colors.B500, text: colors.B50 },
+// };
+const sections = {
+  intro: { bg: [colors.N10, colors.N20], text: 'inherit' },
+  config: { bg: [colors.N700, colors.N800], text: colors.N40 },
+  example: { bg: [colors.N10, colors.N20], text: 'inherit' },
+};
+
+export const Section = ({ area, ...props }) => {
+  const theme = sections[area];
+  return (
+    <section
+      css={{
+        background: `linear-gradient(to bottom right, ${theme.bg.join(
+          ','
+        )}) no-repeat left top`,
+        color: theme.text,
+      }}
+      {...props}
+    />
+  );
+};
 
 export const Container = props => (
   <div
@@ -48,36 +74,37 @@ export const Body = props => (
     {...props}
   />
 );
-const activeButtonBg = {
-  info: 'rgb(190, 218, 255)',
-  success: 'rgb(194, 237, 198)',
-  error: 'rgb(243, 198, 198)',
-};
-const activeButtonTxt = {
-  info: 'rgb(23, 79, 153)',
-  success: 'rgb(31, 116, 38)',
-  error: 'rgb(128, 40, 40)',
+const buttonBg = {
+  info: [colors.B100, colors.B200],
+  success: [colors.G200, colors.G300],
+  error: [colors.R300, colors.R400],
+  snack: [colors.P300, colors.P400],
 };
 
 export const Button = styled.button(({ appearance }) => ({
-  background: '#EBECF0',
+  background: `linear-gradient(to bottom right, ${buttonBg[appearance].join(
+    ','
+  )}) no-repeat left top`,
   border: 0,
   borderRadius: 4,
-  color: 'inherit',
+  color: 'white',
   cursor: 'pointer',
   fontFamily: 'inherit',
   fontSize: 'inherit',
   paddingLeft: '1em',
   paddingRight: '1em',
   lineHeight: '2.2em',
+  transition:
+    'box-shadow 150ms cubic-bezier(0.2, 0, 0, 1), transform 150ms cubic-bezier(0.2, 0, 0, 1)',
 
   ':hover, :focus': {
-    background: '#DFE1E5',
     outline: 0,
+    boxShadow: '0 2px 1px rgba(9, 30, 66, 0.13)',
   },
+  ':hover': { transform: 'scale(1.03)' },
   ':active': {
-    background: activeButtonBg[appearance],
-    color: activeButtonTxt[appearance],
+    transform: 'scale(0.97)',
+    boxShadow: '0 0 0 rgba(9, 30, 66, 0.13)',
   },
 }));
 
@@ -135,12 +162,38 @@ export const Icon = styled.div({
   width: 32,
   marginRight: '0.5em',
 });
-export const Title = styled.h1({
-  fontSize: '2em',
-  fontWeight: 'bold',
-  letterSpacing: '-0.025em',
-  lineHeight: 1.1,
-  margin: '0 0 1em',
+export const Title = ({ children, icon, tag: Tag = 'h2', ...props }) => (
+  <Tag
+    css={{
+      fontSize: '2em',
+      fontWeight: 'bold',
+      letterSpacing: '-0.025em',
+      lineHeight: 1.1,
+      margin: '0 0 1em',
+    }}
+  >
+    {icon ? (
+      <span css={{ position: 'absolute', transform: 'translateY(-100%)' }}>
+        {icon}
+      </span>
+    ) : null}
+    {children}
+  </Tag>
+);
+export const ContentBlock = styled.div(({ align }) => {
+  const map = { left: 'paddingRight', right: 'paddingLeft' };
+  const padding = map[align];
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'space-between',
+    [padding]: '2em',
+  };
+});
+export const StretchGroup = styled.div({
+  alignItems: 'stretch',
+  display: 'flex',
 });
 export const Code = styled.code({
   // backgroundColor: 'rgba(0, 0, 0, 0.09)',
@@ -189,8 +242,8 @@ export const GithubLogo = props => (
 // ==============================
 
 export const CodeExample = styled.div({
-  maxHeight: '100%',
-  width: '50%',
+  maxHeight: '55vh',
+  width: '55%',
 
   [`@media (max-width: ${containerWidth}px)`]: {
     display: 'none',

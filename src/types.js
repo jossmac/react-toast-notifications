@@ -5,8 +5,7 @@ export type Options = {
   appearance?: 'error' | 'info' | 'success',
   autoDismiss?: boolean,
 };
-type CallbackArgs = { event?: Event, id: Id };
-export type Callback = CallbackArgs => void;
+export type Callback = Id => void;
 
 export type AddFn = (content: Node, options?: Options) => Callback;
 export type RemoveFn = (id: Id) => Callback;

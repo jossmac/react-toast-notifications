@@ -8,27 +8,69 @@ import {
   Button,
   Code,
   Container,
+  ContentBlock,
+  Section,
   Footer,
   Header,
   Icon,
   Repo,
   Title,
   GithubLogo,
-  CodeBlock,
+  // CodeBlock,
   CodeExample,
+  StretchGroup,
 } from './styled';
+import CodeBlock from './CodeBlock';
 import './index.css';
 import ConnectivityListener from './ConnectivityListener';
-import { ToastProvider, withToastManager } from '../../src';
+import { ToastProvider, ToastConsumer, withToastManager } from '../../src';
+import exampleText from 'raw-loader!./raw/example';
+
+const snackStates = {
+  entering: { transform: 'translate3d(0,110%,0)' },
+  entered: { transform: 'translate3d(0,0,0)' },
+  exiting: { transform: 'translate3d(0,110%,0)' },
+  exited: { transform: 'translate3d(0,110%,0)' },
+};
+const Snack = ({
+  appearance,
+  children,
+  transitionDuration,
+  transitionState,
+  onDismiss,
+}) => {
+  console.log('onDismiss', onDismiss);
+  return (
+    <div
+      css={{
+        backgroundColor: '#444',
+        borderRadius: 4,
+        boxShadow: '0 3px 8px rgba(0, 0, 0, 0.175)',
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+        padding: 8,
+        transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1)`,
+        ...snackStates[transitionState],
+      }}
+    >
+      <span css={{ flex: 1 }}>{children}</span>
+      <div onClick={onDismiss} role="button">
+        DISMISS
+      </div>
+    </div>
+  );
+};
 
 const exampleCode = ({
   appearance,
   autoDismiss,
   toastContent,
-}) => `import { ToastProvider, withToastManager } from 'react-toast-notifications';
+}) => `import { withToastManager } from 'react-toast-notifications';
 
-const Demo = ({ toastContent, toastManager }) => (
-  <Button onClick={toastManager.add(toastContent, {
+const Demo = ({ content, toastManager }) => (
+  <Button onClick={toastManager.add(content, {
     appearance: '${appearance}',
     autoDismiss: ${autoDismiss},
   })}>
@@ -36,13 +78,7 @@ const Demo = ({ toastContent, toastManager }) => (
   </Button>
 );
 
-const ToastDemo = withToastManager(Demo);
-
-const App = () => (
-  <ToastProvider>
-    <ToastDemo />
-  </ToastProvider>
-);`;
+export const ToastDemo = withToastManager(Demo);`;
 
 // data
 // ------------------------------
@@ -100,16 +136,11 @@ class ToastButtons extends Component {
   render() {
     const { appearance, autoDismiss } = this.state;
     return (
-      <div style={{ alignItems: 'center', display: 'flex' }}>
-        <div
-          css={{
-            display: 'flex',
-            flexDirection: 'column',
-            flex: 1,
-            paddingRight: '1em',
-          }}
-        >
-          <Title>Let users know what&apos;s happening in your app.</Title>
+      <StretchGroup>
+        <ContentBlock align="left">
+          <Title tag="h1">
+            Let users know what&apos;s happening in your app.
+          </Title>
           <div css={{ marginBottom: '1em', marginTop: '1em' }}>
             <RadioGroup
               value={this.state.appearance}
@@ -152,11 +183,11 @@ class ToastButtons extends Component {
               <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
             </div>
           </div>
-        </div>
+        </ContentBlock>
         <CodeExample>
           <CodeBlock>{exampleCode(this.state)}</CodeBlock>
         </CodeExample>
-      </div>
+      </StretchGroup>
     );
   }
 }
@@ -171,45 +202,183 @@ function App() {
   return (
     <ToastProvider>
       <ConnectivityListener />
-      <Container>
-        <Header>
-          <Repo href={repoUrl}>
-            <Icon role="img">🍞</Icon>
-            <span>react-toast-notifications</span>
-          </Repo>
-          <GithubLogo href={repoUrl} target="_blank" />
-        </Header>
+      <Section area="intro">
+        <Container>
+          <Header>
+            <Repo href={repoUrl}>
+              <Icon role="img">🍞</Icon>
+              <span>react-toast-notifications</span>
+            </Repo>
+            <GithubLogo href={repoUrl} target="_blank" />
+          </Header>
 
-        <Body>
-          <Toasts />
-        </Body>
+          <Body>
+            <Toasts />
+          </Body>
 
-        <Footer>
-          <div>
-            <span>by </span>
-            <a href="https://twitter.com/jossmackison" target="_blank">
-              @jossmac
-            </a>{' '}
-            <span>for </span>
-            <a href="https://twitter.com/keystonejs" target="_blank">
-              @keystonejs
-            </a>{' '}
-            on{' '}
-            <a
-              href="https://www.npmjs.com/package/react-toast-notifications"
-              target="_blank"
+          <Footer>
+            <div>
+              <span>by </span>
+              <a href="https://twitter.com/jossmackison" target="_blank">
+                @jossmac
+              </a>{' '}
+              <span>for </span>
+              <a href="http://keystonejs.com" target="_blank">
+                KeystoneJS
+              </a>{' '}
+              on{' '}
+              <a
+                href="https://www.npmjs.com/package/react-toast-notifications"
+                target="_blank"
+              >
+                npm
+              </a>
+            </div>
+            <div>
+              paragraphs from{' '}
+              <a href="http://www.cupcakeipsum.com" target="_blank">
+                Cupcake Ipsum
+              </a>{' '}
+            </div>
+          </Footer>
+        </Container>
+      </Section>
+      {/*
+        ==============================
+        CONFIGURATION
+        ==============================
+      */}
+      <Section area="config">
+        <ToastProvider components={{ Toast: Snack }}>
+          <Container>
+            {/* <Repo href={repoUrl}>
+            <Icon role="img">🚀</Icon>
+            <span>Configuration</span>
+          </Repo> */}
+
+            <Body>
+              <div
+                css={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'space-between',
+                }}
+              >
+                <CodeExample>
+                  <CodeBlock theme="dark">{`import { ToastProvider } from 'react-toast-notifications';
+import { MyCustomToast } from '../toasts';
+
+const App = () => (
+  <ToastProvider
+    autoDismissTimeout={3000}
+    components={{ Toast: MyCustomToast }}
+    placement="bottom-center"
+  >
+    ...
+  </ToastProvider>
+);
+`}</CodeBlock>
+                </CodeExample>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flex: 1,
+                    justifyContent: 'space-between',
+                    paddingLeft: '2em',
+                  }}
+                >
+                  <Title>Make it your own.</Title>
+                  <div>
+                    <p>
+                      Replace or configure any part of the notification system.
+                    </p>
+                    <p>
+                      <ToastConsumer>
+                        {({ add }) => (
+                          <Button
+                            appearance="snack"
+                            onClick={() => add('snack', { appearance: 'info' })}
+                          >
+                            Snack?
+                          </Button>
+                        )}
+                      </ToastConsumer>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Body>
+
+            {/* <Footer>
+            <div>
+              <span>by </span>
+              <a href="https://twitter.com/jossmackison" target="_blank">
+                @jossmac
+              </a>
+            </div>
+          </Footer> */}
+          </Container>
+        </ToastProvider>
+      </Section>
+      {/*
+        ==============================
+        CONFIGURATION
+        ==============================
+      */}
+      <Section area="example">
+        <Container>
+          {/* <Repo href={repoUrl}>
+            <Icon role="img">🚀</Icon>
+            <span>Configuration</span>
+          </Repo> */}
+
+          <Body>
+            <div
+              css={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'space-between',
+              }}
             >
-              npm
-            </a>
-          </div>
-          <div>
-            paragraphs from{' '}
-            <a href="http://www.cupcakeipsum.com" target="_blank">
-              Cupcake Ipsum
-            </a>{' '}
-          </div>
-        </Footer>
-      </Container>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flex: 1,
+                  justifyContent: 'space-between',
+                  paddingRight: '2em',
+                }}
+              >
+                <Title>Let&apos;s get real.</Title>
+                <div>
+                  <p>
+                    You&apos;re probably not firing off notifications
+                    haphazardly, from buttons in your app.
+                  </p>
+                  <p>
+                    To see an example of how you might use this IRL, toggle the{' '}
+                    <code>Offline</code> checkbox in the Network pane of your
+                    dev tools.
+                  </p>
+                </div>
+              </div>
+              <CodeExample>
+                <CodeBlock>{exampleText}</CodeBlock>
+              </CodeExample>
+            </div>
+          </Body>
+
+          {/* <Footer>
+            <div>
+              <span>by </span>
+              <a href="https://twitter.com/jossmackison" target="_blank">
+                @jossmac
+              </a>
+            </div>
+          </Footer> */}
+        </Container>
+      </Section>
     </ToastProvider>
   );
 }

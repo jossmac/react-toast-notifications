@@ -8,7 +8,6 @@ import { CheckIcon, FlameIcon, InfoIcon, CloseIcon } from './icons';
 
 const borderRadius = 4;
 const gutter = 8;
-const autoDismissDuration = 5000;
 const toastWidth = 360;
 const shrink = keyframes`from { height: 100%; } to { height: 0% }`;
 
@@ -73,8 +72,8 @@ const Content = styled.div({
 // NOTE: invoke animation when NOT `autoDismiss` with opacity of 0 to avoid a
 // paint bug in FireFox.
 // https://bugzilla.mozilla.org/show_bug.cgi?id=625289
-const Countdown = styled.div(({ opacity }) => ({
-  animation: `${shrink} ${autoDismissDuration}ms linear`,
+const Countdown = styled.div(({ autoDismissTimeout, opacity }) => ({
+  animation: `${shrink} ${autoDismissTimeout}ms linear`,
   backgroundColor: 'rgba(0,0,0,0.1)',
   bottom: 0,
   height: 0,
@@ -83,7 +82,7 @@ const Countdown = styled.div(({ opacity }) => ({
   position: 'absolute',
   width: '100%',
 }));
-const Icon = ({ appearance, autoDismiss }) => {
+const Icon = ({ appearance, autoDismiss, autoDismissTimeout }) => {
   const meta = appearances[appearance];
   const Glyph = meta.icon;
 
@@ -103,7 +102,10 @@ const Icon = ({ appearance, autoDismiss }) => {
         width: 30,
       }}
     >
-      <Countdown opacity={autoDismiss ? 1 : 0} />
+      <Countdown
+        opacity={autoDismiss ? 1 : 0}
+        autoDismissTimeout={autoDismissTimeout}
+      />
       <Glyph css={{ position: 'relative', zIndex: 1 }} />
     </div>
   );
@@ -114,22 +116,58 @@ const toastStates = {
   exiting: { transform: 'translate3d(110%,0,0)' },
   exited: { transform: 'translate3d(110%,0,0)' },
 };
-const transitionDurationMs = 220;
-const transitionDuration = `${transitionDurationMs}ms`;
-const ToastElement = styled.div(({ appearance, transitionState }) => ({
-  backgroundColor: appearances[appearance].bg,
-  borderRadius,
-  boxShadow: '0 3px 8px rgba(0, 0, 0, 0.175)',
-  color: appearances[appearance].text,
-  display: 'flex',
-  marginBottom: gutter,
-  transition: `transform ${transitionDuration} cubic-bezier(0.2, 0, 0, 1)`,
-  transform: 'translate3d(110%,0,0)',
-  width: toastWidth,
-  ...toastStates[transitionState],
-}));
+const ToastElement = styled.div(
+  ({ appearance, transitionDuration, transitionState }) => ({
+    backgroundColor: appearances[appearance].bg,
+    borderRadius,
+    boxShadow: '0 3px 8px rgba(0, 0, 0, 0.175)',
+    color: appearances[appearance].text,
+    display: 'flex',
+    marginBottom: gutter,
+    transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1)`,
+    width: toastWidth,
+    ...toastStates[transitionState],
+  })
+);
 
-export const ToastContainer = ({ children }: *) => (
+// ==============================
+// DefaultToast
+// ==============================
+
+const DefaultToast = ({
+  appearance,
+  autoDismiss,
+  autoDismissTimeout,
+  children,
+  onDismiss,
+  transitionDuration,
+  transitionState,
+}) => (
+  <ToastElement
+    appearance={appearance}
+    transitionState={transitionState}
+    transitionDuration={transitionDuration}
+  >
+    <Icon
+      appearance={appearance}
+      autoDismiss={autoDismiss}
+      autoDismissTimeout={autoDismissTimeout}
+    />
+    <Content>{children}</Content>
+    {onDismiss ? (
+      <Button onClick={onDismiss} role="button">
+        <CloseIcon />
+        <A11yText>Close</A11yText>
+      </Button>
+    ) : null}
+  </ToastElement>
+);
+
+// ==============================
+// Container
+// ==============================
+
+const ToastContainer = ({ children }: *) => (
   <div
     css={{
       boxSizing: 'border-box',
@@ -149,22 +187,43 @@ export const ToastContainer = ({ children }: *) => (
 );
 
 type Appearance = $Keys<typeof appearances>;
-type Props = {
+export type ToastProps = {
   appearance: Appearance,
-  autoDismiss: boolean,
+  autoDismiss: boolean | number,
+  autoDismissTimeout: number, // inherited from ToastProvider
   children: Node,
   onDismiss: Event => *,
+  transitionDuration: number, // inherited from ToastProvider
+};
+type State = {
+  autoDismissTimeout: number,
 };
 
-export class Toast extends Component<Props> {
+const defaultAutoDismissTimeout = 5000;
+
+export class ToastController extends Component<ToastProps, State> {
   timeout: number;
+  state = { autoDismissTimeout: this.props.autoDismissTimeout };
   static defaultProps = {
     autoDismiss: false,
   };
+  static getDerivedStateFromProps({
+    autoDismiss,
+    autoDismissTimeout,
+  }: ToastProps) {
+    if (!autoDismiss) return null;
+
+    const timeout =
+      typeof autoDismiss === 'number' ? autoDismiss : autoDismissTimeout;
+
+    return { autoDismissTimeout: timeout };
+  }
   componentDidMount() {
     const { autoDismiss, onDismiss } = this.props;
+    const { autoDismissTimeout } = this.state;
+
     if (autoDismiss) {
-      this.timeout = setTimeout(onDismiss, autoDismissDuration);
+      this.timeout = setTimeout(onDismiss, autoDismissTimeout);
     }
   }
   componentWillUnmount() {
@@ -173,35 +232,25 @@ export class Toast extends Component<Props> {
     }
   }
   render() {
-    const {
-      appearance,
-      autoDismiss,
-      children,
-      onDismiss,
-      ...props
-    } = this.props;
+    const { Toast, ...props } = this.props;
+    const { autoDismissTimeout } = this.state;
+    const time = props.transitionDuration;
 
     return (
-      <Transition
-        appear
-        mountOnEnter
-        unmountOnExit
-        timeout={transitionDurationMs}
-        {...props}
-      >
-        {state => (
-          <ToastElement appearance={appearance} transitionState={state}>
-            <Icon appearance={appearance} autoDismiss={autoDismiss} />
-            <Content>{children}</Content>
-            {onDismiss ? (
-              <Button onClick={onDismiss} role="button">
-                <CloseIcon />
-                <A11yText>Close</A11yText>
-              </Button>
-            ) : null}
-          </ToastElement>
+      <Transition appear mountOnEnter unmountOnExit timeout={time} {...props}>
+        {transitionState => (
+          <Toast
+            autoDismissTimeout={autoDismissTimeout}
+            transitionState={transitionState}
+            {...props}
+          />
         )}
       </Transition>
     );
   }
 }
+
+export const defaultComponents = {
+  ToastContainer,
+  Toast: DefaultToast,
+};
