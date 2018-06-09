@@ -5,6 +5,10 @@
   "main": "dist/index.js",
   "license": "MIT",
   "homepage": "https://jossmac.github.io/react-toast-notifications",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jossmac/react-toast-notifications.git"
+  },
   "bugs": {
     "url": "https://github.com/jossmac/react-toast-notifications/issues"
   },
