@@ -1,10 +1,15 @@
 {
   "name": "react-toast-notifications",
   "version": "1.1.0",
-  "description": "A toast notification system for react.",
+  "description": "A configurable, composable, toast notification system for react.",
   "main": "dist/index.js",
   "license": "MIT",
+  "author": "Joss Mackison (https://github.com/jossmac)",
   "homepage": "https://jossmac.github.io/react-toast-notifications",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jossmac/react-toast-notifications.git"
+  },
   "bugs": {
     "url": "https://github.com/jossmac/react-toast-notifications/issues"
   },
@@ -18,11 +23,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development",
+    "prettier_lint": "prettier --list-different \"**/*.js\"",
+    "eslint": "eslint .",
+    "lint": "yarn prettier_lint && yarn eslint",
     "build": "babel src -d dist --copy-files",
     "prepublishOnly": "npm run build",
     "build:examples": "webpack --mode production",
     "deploy:examples": "gh-pages -d examples/dist",
     "publish:examples": "npm run build:examples && npm run deploy:examples"
+  },
+  "prettier": {
+    "proseWrap": "preserve",
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "dependencies": {
     "emotion": "^9.1.1",
@@ -33,6 +46,8 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
+    "babel-eslint": "^8.2.2",
+    "prettier": "^1.12.1",
     "babel-plugin-emotion": "^9.1.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -42,6 +57,7 @@
     "file-loader": "^1.1.11",
     "gh-pages": "^1.1.0",
     "html-webpack-plugin": "^3.2.0",
+    "raw-loader": "^0.5.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-emotion": "^9.1.3",

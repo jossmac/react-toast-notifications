@@ -4,7 +4,7 @@
   ==============================
 */
 
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans:400,700|Roboto:400');
 
 body {
   -moz-font-feature-settings: 'liga' on;
@@ -12,7 +12,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background: white;
-  color: #253858;
+  color: #172b4d;
   font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont,
     'Helvetica Neue', Helvetica, sans-serif;
   font-size: 18px;
@@ -24,6 +24,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 p > code {
+  background-color: #deebff;
+  color: #0747a6;
+  border-radius: 4px;
+  font-size: 0.85em;
+  padding: 1px 4px;
   white-space: nowrap;
 }
 p,

@@ -8,6 +8,9 @@ const htmlPlugin = new HtmlWebpackPlugin({
 const faviconPlugin = new HtmlWebpackPlugin({
   favicon: 'examples/src/favicon.ico',
 });
+const twitterPlugin = new HtmlWebpackPlugin({
+  favicon: 'examples/src/twitter-image.png',
+});
 
 module.exports = {
   entry: path.join(__dirname, 'examples/src/index.js'),
@@ -28,7 +31,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [htmlPlugin, faviconPlugin],
+  plugins: [htmlPlugin, faviconPlugin, twitterPlugin],
   resolve: {
     extensions: ['.js', '.jsx'],
   },

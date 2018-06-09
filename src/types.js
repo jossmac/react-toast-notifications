@@ -5,11 +5,18 @@ export type Options = {
   appearance?: 'error' | 'info' | 'success',
   autoDismiss?: boolean,
 };
-type CallbackArgs = { event?: Event, id: Id };
-export type Callback = CallbackArgs => void;
+export type Callback = Id => void;
 
 export type AddFn = (content: Node, options?: Options) => Callback;
 export type RemoveFn = (id: Id) => Callback;
+
+export type Placement =
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right'
+  | 'top-left'
+  | 'top-center'
+  | 'top-right';
 
 export type ToastType = Options & { content: Node, id: Id };
 export type ToastsType = Array<ToastType>;
