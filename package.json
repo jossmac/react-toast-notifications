@@ -4,6 +4,7 @@
   "description": "A configurable, composable, toast notification system for react.",
   "main": "dist/index.js",
   "license": "MIT",
+  "author": "Joss Mackison (https://github.com/jossmac)",
   "homepage": "https://jossmac.github.io/react-toast-notifications",
   "repository": {
     "type": "git",
