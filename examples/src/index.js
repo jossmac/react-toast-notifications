@@ -16,21 +16,20 @@ import {
   Repo,
   Title,
   GithubLogo,
-  // CodeBlock,
-  CodeExample,
   StretchGroup,
 } from './styled';
 import CodeBlock from './CodeBlock';
 import './index.css';
 import ConnectivityListener from './ConnectivityListener';
 import { ToastProvider, ToastConsumer, withToastManager } from '../../src';
+import * as colors from '../../src/colors';
 import exampleText from 'raw-loader!./raw/example';
 
 const snackStates = {
-  entering: { transform: 'translate3d(0,110%,0)' },
-  entered: { transform: 'translate3d(0,0,0)' },
-  exiting: { transform: 'translate3d(0,110%,0)' },
-  exited: { transform: 'translate3d(0,110%,0)' },
+  entering: { transform: 'translate3d(0, 120%, 0) scale(0.9)' },
+  entered: { transform: 'translate3d(0, 0, 0) scale(1)' },
+  exiting: { transform: 'translate3d(0, 120%, 0) scale(0.9)' },
+  exited: { transform: 'translate3d(0, 120%, 0) scale(0.9)' },
 };
 const Snack = ({
   appearance,
@@ -39,25 +38,48 @@ const Snack = ({
   transitionState,
   onDismiss,
 }) => {
-  console.log('onDismiss', onDismiss);
   return (
     <div
       css={{
-        backgroundColor: '#444',
-        borderRadius: 4,
-        boxShadow: '0 3px 8px rgba(0, 0, 0, 0.175)',
-        color: 'white',
+        alignItems: 'center',
+        backgroundColor: 'rgb(49, 49, 49)',
+        borderRadius: 2,
+        boxShadow: `
+          0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+          0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+          0px 1px 18px 0px rgba(0, 0, 0, 0.12)`,
+        color: '#fff',
         display: 'flex',
+        flexWrap: 'wrap',
         justifyContent: 'space-between',
-        marginBottom: 8,
-        padding: 8,
-        transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1)`,
+        fontFamily: 'Roboto',
+        // marginBottom: 8,
+        minWidth: 288,
+        maxWidth: 568,
+        padding: '6px 24px',
+        pointerEvents: 'initial',
+        transitionProperty: `transform`,
+        transitionDuration: `${transitionDuration}ms`,
+        transitionTimingFunction: `cubic-bezier(0.2, 0, 0, 1)`,
+        transformOrigin: 'bottom',
+        zIndex: 2,
         ...snackStates[transitionState],
       }}
     >
-      <span css={{ flex: 1 }}>{children}</span>
-      <div onClick={onDismiss} role="button">
-        DISMISS
+      <div css={{ fontSize: '0.875rem', padding: '8px 0' }}>{children}</div>
+      <div
+        onClick={onDismiss}
+        role="button"
+        css={{
+          color: colors.P100,
+          cursor: 'pointer',
+          fontSize: '0.8125rem',
+          marginLeft: 'auto',
+          padding: '7px 8px',
+          textTransform: 'uppercase',
+        }}
+      >
+        Undo
       </div>
     </div>
   );
@@ -86,7 +108,8 @@ export const ToastDemo = withToastManager(Demo);`;
 const paragraphArray = [
   'Amet soufflé carrot cake tootsie roll jelly-o chocolate cake.',
   'Chocolate bar gummies sweet roll macaroon powder sweet tart croissant.',
-  'Pastry ice cream bear claw cupcake topping caramels jelly beans chocolate cheesecake. Candy canes pastry cake tart powder.',
+  'Pastry ice cream bear claw cupcake topping caramels jelly beans chocolate cheesecake.',
+  'Candy canes pastry cake tart powder.',
   'Tootsie roll bear claw sesame snaps candy cheesecake caramels cookie.',
   'Lemon drops donut marzipan gummi bears cotton candy cotton candy jelly-o carrot cake.',
   'Lemon drops pastry apple pie biscuit tart tootsie roll.',
@@ -94,8 +117,10 @@ const paragraphArray = [
   'Sesame snaps donut gingerbread marshmallow topping powder.',
   'Biscuit chocolate cheesecake pudding candy canes tart halvah sweet.',
   'Sugar plum cake candy carrot cake.',
-  'Ice cream marzipan liquorice candy canes sesame snaps danish soufflé lollipop candy canes. Lemon drops cotton candy pudding.',
-  'Pie cake soufflé cupcake jujubes sugar plum. Liquorice lollipop oat cake.',
+  'Ice cream marzipan liquorice candy canes sesame snaps danish soufflé lollipop candy canes.',
+  'Lemon drops cotton candy pudding.',
+  'Pie cake soufflé cupcake jujubes sugar plum.',
+  'Liquorice lollipop oat cake.',
 ];
 
 function getRandom() {
@@ -107,7 +132,7 @@ function getRandom() {
 // ------------------------------
 
 const appearances = [
-  { value: 'info', label: 'Info' },
+  // { value: 'info', label: 'Info' },
   { value: 'success', label: 'Success' },
   { value: 'error', label: 'Error' },
 ];
@@ -184,9 +209,7 @@ class ToastButtons extends Component {
             </div>
           </div>
         </ContentBlock>
-        <CodeExample>
-          <CodeBlock>{exampleCode(this.state)}</CodeBlock>
-        </CodeExample>
+        <CodeBlock>{exampleCode(this.state)}</CodeBlock>
       </StretchGroup>
     );
   }
@@ -207,7 +230,7 @@ function App() {
           <Header>
             <Repo href={repoUrl}>
               <Icon role="img">🍞</Icon>
-              <span>react-toast-notifications</span>
+              <span>React Toast Notifications</span>
             </Repo>
             <GithubLogo href={repoUrl} target="_blank" />
           </Header>
@@ -222,7 +245,7 @@ function App() {
               <a href="https://twitter.com/jossmackison" target="_blank">
                 @jossmac
               </a>{' '}
-              <span>for </span>
+              {/* <span>for </span>
               <a href="http://keystonejs.com" target="_blank">
                 KeystoneJS
               </a>{' '}
@@ -232,7 +255,7 @@ function App() {
                 target="_blank"
               >
                 npm
-              </a>
+              </a> */}
             </div>
             <div>
               paragraphs from{' '}
@@ -249,28 +272,39 @@ function App() {
         ==============================
       */}
       <Section area="config">
-        <ToastProvider components={{ Toast: Snack }}>
+        <ToastProvider components={{ Toast: Snack }} placement="bottom-center">
           <Container>
-            {/* <Repo href={repoUrl}>
-            <Icon role="img">🚀</Icon>
-            <span>Configuration</span>
-          </Repo> */}
-
             <Body>
-              <div
-                css={{
-                  display: 'flex',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                }}
-              >
-                <CodeExample>
-                  <CodeBlock theme="dark">{`import { ToastProvider } from 'react-toast-notifications';
-import { MyCustomToast } from '../toasts';
+              <StretchGroup reverse>
+                <ContentBlock align="right">
+                  <Title>Make it your own.</Title>
+                  <div>
+                    <p>
+                      Replace or configure any part of the notification system.
+                    </p>
+                    <ToastConsumer>
+                      {({ add, toasts }) => (
+                        <Button
+                          appearance="snack"
+                          isDisabled={toasts.length}
+                          onClick={
+                            toasts.length
+                              ? null
+                              : () => add(getRandom(), { autoDismiss: 6000 })
+                          }
+                        >
+                          Snackbar
+                        </Button>
+                      )}
+                    </ToastConsumer>
+                  </div>
+                </ContentBlock>
+                <CodeBlock theme="dark">{`import { ToastProvider } from 'react-toast-notifications';
+import { MyCustomToast } from '../snackbar';
 
 const App = () => (
   <ToastProvider
-    autoDismissTimeout={3000}
+    autoDismissTimeout={6000}
     components={{ Toast: MyCustomToast }}
     placement="bottom-center"
   >
@@ -278,36 +312,7 @@ const App = () => (
   </ToastProvider>
 );
 `}</CodeBlock>
-                </CodeExample>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    paddingLeft: '2em',
-                  }}
-                >
-                  <Title>Make it your own.</Title>
-                  <div>
-                    <p>
-                      Replace or configure any part of the notification system.
-                    </p>
-                    <p>
-                      <ToastConsumer>
-                        {({ add }) => (
-                          <Button
-                            appearance="snack"
-                            onClick={() => add('snack', { appearance: 'info' })}
-                          >
-                            Snack?
-                          </Button>
-                        )}
-                      </ToastConsumer>
-                    </p>
-                  </div>
-                </div>
-              </div>
+              </StretchGroup>
             </Body>
 
             {/* <Footer>
@@ -334,49 +339,27 @@ const App = () => (
           </Repo> */}
 
           <Body>
-            <div
-              css={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'space-between',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                  paddingRight: '2em',
-                }}
-              >
+            <StretchGroup>
+              <ContentBlock align="left">
                 <Title>Let&apos;s get real.</Title>
                 <div>
                   <p>
                     You&apos;re probably not firing off notifications
-                    haphazardly, from buttons in your app.
+                    haphazardly, from some random buttons in your app.*
                   </p>
                   <p>
                     To see an example of how you might use this IRL, toggle the{' '}
                     <code>Offline</code> checkbox in the Network pane of your
                     dev tools.
                   </p>
+                  <p>
+                    <small>* It's totally cool if you are, no judgement.</small>
+                  </p>
                 </div>
-              </div>
-              <CodeExample>
-                <CodeBlock>{exampleText}</CodeBlock>
-              </CodeExample>
-            </div>
+              </ContentBlock>
+              <CodeBlock>{exampleText}</CodeBlock>
+            </StretchGroup>
           </Body>
-
-          {/* <Footer>
-            <div>
-              <span>by </span>
-              <a href="https://twitter.com/jossmackison" target="_blank">
-                @jossmac
-              </a>
-            </div>
-          </Footer> */}
         </Container>
       </Section>
     </ToastProvider>

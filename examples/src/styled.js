@@ -22,7 +22,7 @@ const containerWidth = 960;
 // };
 const sections = {
   intro: { bg: [colors.N10, colors.N20], text: 'inherit' },
-  config: { bg: [colors.N700, colors.N800], text: colors.N40 },
+  config: { bg: [colors.N700, colors.N800], text: 'white' },
   example: { bg: [colors.N10, colors.N20], text: 'inherit' },
 };
 
@@ -81,7 +81,7 @@ const buttonBg = {
   snack: [colors.P300, colors.P400],
 };
 
-export const Button = styled.button(({ appearance }) => ({
+export const Button = styled.button(({ appearance, isDisabled }) => ({
   background: `linear-gradient(to bottom right, ${buttonBg[appearance].join(
     ','
   )}) no-repeat left top`,
@@ -94,6 +94,8 @@ export const Button = styled.button(({ appearance }) => ({
   paddingLeft: '1em',
   paddingRight: '1em',
   lineHeight: '2.2em',
+  pointerEvents: isDisabled ? 'none' : null,
+  opacity: isDisabled ? '0.5' : null,
   transition:
     'box-shadow 150ms cubic-bezier(0.2, 0, 0, 1), transform 150ms cubic-bezier(0.2, 0, 0, 1)',
 
@@ -143,11 +145,7 @@ export const Footer = styled.footer({
   color: '#97A0AF',
   display: 'flex',
   justifyContent: 'space-between',
-  fontSize: 14,
-
-  '@media (max-width: 480px)': {
-    flexDirection: 'column',
-  },
+  fontSize: '0.85rem',
 });
 export const Header = styled.header({
   display: 'flex',
@@ -188,13 +186,28 @@ export const ContentBlock = styled.div(({ align }) => {
     flexDirection: 'column',
     flex: 1,
     justifyContent: 'space-between',
-    [padding]: '2em',
+
+    [`@media (min-width: 740px)`]: {
+      [padding]: '2em',
+    },
+    [`@media (max-width: 739px)`]: {
+      paddingBottom: '2em',
+    },
   };
 });
-export const StretchGroup = styled.div({
-  alignItems: 'stretch',
+export const StretchGroup = styled.div(({ reverse }) => ({
   display: 'flex',
-});
+  flex: 1,
+  flexDirection: reverse ? 'row-reverse' : 'row',
+  maxWidth: '100%',
+
+  [`@media (min-width: 740px)`]: {
+    alignItems: 'stretch',
+  },
+  [`@media (max-width: 739px)`]: {
+    flexDirection: 'column',
+  },
+}));
 export const Code = styled.code({
   // backgroundColor: 'rgba(0, 0, 0, 0.09)',
   backgroundColor: '#FFEBE5',
@@ -236,47 +249,3 @@ export const GithubLogo = props => (
     </svg>
   </GithubAnchor>
 );
-
-// ==============================
-// Syntax Highlighter
-// ==============================
-
-export const CodeExample = styled.div({
-  maxHeight: '55vh',
-  width: '55%',
-
-  [`@media (max-width: ${containerWidth}px)`]: {
-    display: 'none',
-  },
-});
-
-export const CodeBlock = ({
-  children,
-  style,
-  ...props
-}: {
-  children: Node,
-}) => {
-  return (
-    <SyntaxHighlighter
-      language="jsx"
-      style={coy}
-      customStyle={{
-        backgroundColor: '#FAFBFC',
-        border: '1px solid #F4F5F7',
-        borderRadius: 4,
-        fontSize: 12,
-        overflowX: 'auto',
-        margin: 0,
-        marginBottom: 0,
-        maxHeight: '100%',
-        padding: 12,
-        WebkitOverflowScrolling: 'touch',
-        ...style,
-      }}
-      {...props}
-    >
-      {children}
-    </SyntaxHighlighter>
-  );
-};

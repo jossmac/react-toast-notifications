@@ -18,11 +18,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development",
+    "prettier_lint": "prettier --list-different \"**/*.js\"",
+    "eslint": "eslint .",
+    "lint": "yarn prettier_lint && yarn eslint",
     "build": "babel src -d dist --copy-files",
     "prepublishOnly": "npm run build",
     "build:examples": "webpack --mode production",
     "deploy:examples": "gh-pages -d examples/dist",
     "publish:examples": "npm run build:examples && npm run deploy:examples"
+  },
+  "prettier": {
+    "proseWrap": "preserve",
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "dependencies": {
     "emotion": "^9.1.1",
@@ -33,6 +41,8 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
+    "babel-eslint": "^8.2.2",
+    "prettier": "^1.12.1",
     "babel-plugin-emotion": "^9.1.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",

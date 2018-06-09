@@ -8,6 +8,7 @@ const commonCode = {
   margin: 0,
   marginBottom: 0,
   maxHeight: '100%',
+  maxWidth: '100%',
 };
 const commonPre = {
   borderRadius: 4,
@@ -17,6 +18,7 @@ const commonPre = {
   overflowX: 'auto',
   margin: 0,
   maxHeight: '100%',
+  maxWidth: '100%',
   padding: 12,
   WebkitOverflowScrolling: 'touch',
 };
@@ -57,7 +59,6 @@ export const light = {
     MozTabSize: '4',
     msHyphens: 'none',
     OTabSize: '4',
-    position: 'relative',
     tabSize: '4',
     textAlign: 'left',
     WebkitBoxSizing: 'border-box',
@@ -68,7 +69,6 @@ export const light = {
     wordWrap: 'normal',
   },
   'pre[class*="language-"]>code': {
-    position: 'relative',
     borderLeft: '10px solid #358ccb',
     boxShadow: '-1px 0px 0px 0px #358ccb, 0px 0px 0px 1px #dfdfdf',
     backgroundColor: '#fdfdfd',
@@ -149,14 +149,11 @@ export const dark = {
     color: colors.N20,
     hyphens: 'none',
     lineHeight: '1.5',
-    margin: '.5em 0',
-    marginBottom: '1em',
     MozBoxSizing: 'border-box',
     MozHyphens: 'none',
     MozTabSize: '4',
     msHyphens: 'none',
     OTabSize: '4',
-    position: 'relative',
     tabSize: '4',
     textAlign: 'left',
     WebkitBoxSizing: 'border-box',

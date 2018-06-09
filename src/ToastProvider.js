@@ -1,8 +1,13 @@
 // @flow
 
 import React, { Component, type ComponentType, type Node } from 'react';
+import { createPortal } from 'react-dom';
 
-import { defaultComponents, type ToastProps, ToastController } from './styled';
+import { ToastController } from './ToastController';
+import { ToastContainer, type ToastContainerProps } from './ToastContainer';
+import { type ToastProps, DefaultToast } from './ToastElement';
+const defaultComponents = { Toast: DefaultToast, ToastContainer };
+
 import { generateUEID } from './utils';
 import type {
   AddFn,
@@ -10,6 +15,7 @@ import type {
   Callback,
   ToastsType,
   Options,
+  Placement,
   Id,
 } from './types';
 
@@ -22,7 +28,7 @@ const NOOP = () => {};
 
 type Components = {
   Toast: ComponentType<ToastProps>,
-  ToastContainer: ComponentType<{ children: Node }>,
+  ToastContainer: ComponentType<ToastContainerProps>,
 };
 type Props = {
   // A convenience prop; the time until a toast will be dismissed automatically, in milliseconds.
@@ -32,6 +38,8 @@ type Props = {
   children: Node,
   // Component replacement object
   components: Components,
+  // Where, in relation to the viewport, to place the toasts
+  placement: Placement,
   // A convenience prop; the duration of the toast transition, in milliseconds.
   // Note that specifying this will override any defaults set on individual children Toasts.
   transitionDuration: number,
@@ -44,6 +52,7 @@ export class ToastProvider extends Component<Props, State> {
   static defaultProps = {
     autoDismissTimeout: 5000,
     components: defaultComponents,
+    placement: 'top-right',
     transitionDuration: 220,
   };
 
@@ -94,23 +103,31 @@ export class ToastProvider extends Component<Props, State> {
     const { toasts } = this.state;
     const { add, remove } = this;
 
+    // we don't know where the user may render the provider, better to be safe
+    // and portal out to the body
+    const portalTarget = document.body;
+    if (!portalTarget) return;
+
     return (
-      <Provider value={{ add, remove }}>
+      <Provider value={{ add, remove, toasts }}>
         {children}
 
-        <ToastContainer>
-          {toasts.map(({ content, id, ...rest }) => (
-            <ToastController
-              key={id}
-              Toast={Toast}
-              onDismiss={this.onDismiss(id)}
-              {...props}
-              {...rest}
-            >
-              {content}
-            </ToastController>
-          ))}
-        </ToastContainer>
+        {createPortal(
+          <ToastContainer {...props}>
+            {toasts.map(({ content, id, ...rest }) => (
+              <ToastController
+                key={id}
+                Toast={Toast}
+                onDismiss={this.onDismiss(id)}
+                {...props}
+                {...rest}
+              >
+                {content}
+              </ToastController>
+            ))}
+          </ToastContainer>,
+          portalTarget
+        )}
       </Provider>
     );
   }
