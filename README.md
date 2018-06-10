@@ -1,3 +1,5 @@
+<img align="right" src="https://user-images.githubusercontent.com/2730833/41197727-5e0b4d2e-6cab-11e8-9d0d-873d1f8ebced.png" alt="react-toast-notifications" />
+
 # React Toast Notifications
 
 A configurable, composable, toast notification system for react.
