@@ -17,7 +17,7 @@ yarn add react-toast-notifications
 Wrap your app in the `ToastProvider`, which provides context for the `Toast` descendants.
 
 ```jsx
-import { ToastProvider, withToastManager } from 'react-toast-notifications';
+import { ToastConsumer, ToastProvider, withToastManager } from 'react-toast-notifications';
 import validate from 'some-validation-lib';
 
 class FormComponent extends React.Component {
@@ -38,11 +38,19 @@ class FormComponent extends React.Component {
   }
 }
 
+// wrap your component to pass in the `toastManager` prop
 const FormWithToasts = withToastManager(FormComponent);
 
 const App = () => (
   <ToastProvider>
     <FormWithToasts />
+
+    {/* or if render props are more your speed */}
+    <ToastConsumer>{({ addToast }) => (
+      <button onClick={(e) => addToast(`Notified by ${e.target}`)}>
+        Toasty
+      </button>
+    )}</ToastConsumer>
   </ToastProvider>
 );
 ```
