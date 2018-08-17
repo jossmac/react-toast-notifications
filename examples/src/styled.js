@@ -78,6 +78,7 @@ const buttonBg = {
   info: [colors.B100, colors.B200],
   success: [colors.G200, colors.G300],
   error: [colors.R300, colors.R400],
+  warning: [colors.Y300, colors.Y400],
   snack: [colors.P300, colors.P400],
 };
 

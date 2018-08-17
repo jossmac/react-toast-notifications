@@ -92,7 +92,7 @@ const exampleCode = ({
 }) => `import { withToastManager } from 'react-toast-notifications';
 
 const Demo = ({ content, toastManager }) => (
-  <Button onClick={toastManager.add(content, {
+  <Button onClick={() => toastManager.add(content, {
     appearance: '${appearance}',
     autoDismiss: ${autoDismiss},
   })}>
@@ -132,9 +132,9 @@ function getRandom() {
 // ------------------------------
 
 const appearances = [
-  // { value: 'info', label: 'Info' },
   { value: 'success', label: 'Success' },
   { value: 'error', label: 'Error' },
+  { value: 'warning', label: 'Warning' },
 ];
 
 class ToastButtons extends Component {
