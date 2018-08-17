@@ -4,7 +4,7 @@ import React, { Children, Component } from 'react';
 import styled, { keyframes } from 'react-emotion';
 import { Transition, TransitionGroup } from 'react-transition-group';
 
-import { CheckIcon, FlameIcon, InfoIcon, CloseIcon } from './icons';
+import { CheckIcon, FlameIcon, InfoIcon, CloseIcon, AlertIcon } from './icons';
 import * as colors from './colors';
 import type { Placement } from './types';
 
@@ -48,6 +48,12 @@ const appearances = {
     text: colors.R500,
     fg: colors.R300,
     bg: colors.R50,
+  },
+  warning: {
+    icon: AlertIcon,
+    text: colors.Y500,
+    fg: colors.Y300,
+    bg: colors.Y50,
   },
   info: {
     icon: InfoIcon,

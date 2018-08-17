@@ -14,6 +14,14 @@ function getDefaultProps(width) {
   };
 }
 
+export const AlertIcon = props => (
+  <svg {...getDefaultProps(16)} {...props}>
+    <path
+      fillRule="evenodd"
+      d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"
+    />
+  </svg>
+);
 export const CheckIcon = props => (
   <svg {...getDefaultProps(12)} {...props}>
     <path fillRule="evenodd" d="M12 5.5l-8 8-4-4L1.5 8 4 10.5 10.5 4 12 5.5z" />

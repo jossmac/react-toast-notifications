@@ -132,9 +132,9 @@ function getRandom() {
 // ------------------------------
 
 const appearances = [
-  // { value: 'info', label: 'Info' },
   { value: 'success', label: 'Success' },
   { value: 'error', label: 'Error' },
+  { value: 'warning', label: 'Warning' },
 ];
 
 class ToastButtons extends Component {
