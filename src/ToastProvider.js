@@ -22,6 +22,11 @@ import type {
 // $FlowFixMe
 const { Consumer, Provider } = React.createContext();
 const NOOP = () => {};
+const canUseDOM = !!(
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement
+);
 
 // Provider
 // ==============================
@@ -103,30 +108,29 @@ export class ToastProvider extends Component<Props, State> {
     const { toasts } = this.state;
     const { add, remove } = this;
 
-    // we don't know where the user may render the provider, better to be safe
-    // and portal out to the body
-    const portalTarget = document.body;
-    if (!portalTarget) return;
-
     return (
       <Provider value={{ add, remove, toasts }}>
         {children}
 
-        {createPortal(
-          <ToastContainer {...props}>
-            {toasts.map(({ content, id, ...rest }) => (
-              <ToastController
-                key={id}
-                Toast={Toast}
-                onDismiss={this.onDismiss(id)}
-                {...props}
-                {...rest}
-              >
-                {content}
-              </ToastController>
-            ))}
-          </ToastContainer>,
-          portalTarget
+        {canUseDOM ? (
+          createPortal(
+            <ToastContainer {...props}>
+              {toasts.map(({ content, id, ...rest }) => (
+                <ToastController
+                  key={id}
+                  Toast={Toast}
+                  onDismiss={this.onDismiss(id)}
+                  {...props}
+                  {...rest}
+                >
+                  {content}
+                </ToastController>
+              ))}
+            </ToastContainer>,
+            document.body
+          )
+        ) : (
+          <ToastContainer {...props} /> // keep ReactDOM.hydrate happy
         )}
       </Provider>
     );
