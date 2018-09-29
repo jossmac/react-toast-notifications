@@ -2,7 +2,6 @@
 
 import React, { Children, Component } from 'react';
 import styled, { keyframes } from 'react-emotion';
-import { Transition, TransitionGroup } from 'react-transition-group';
 
 import { CheckIcon, FlameIcon, InfoIcon, CloseIcon, AlertIcon } from './icons';
 import * as colors from './colors';
