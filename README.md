@@ -46,8 +46,8 @@ const App = () => (
     <FormWithToasts />
 
     {/* or if render props are more your speed */}
-    <ToastConsumer>{({ addToast }) => (
-      <button onClick={(e) => addToast(`Notified by ${e.target}`)}>
+    <ToastConsumer>{({ add }) => (
+      <button onClick={(e) => add(`Notified by ${e.target}`)}>
         Toasty
       </button>
     )}</ToastConsumer>
