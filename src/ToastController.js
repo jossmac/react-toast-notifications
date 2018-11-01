@@ -2,7 +2,7 @@
 
 import React, { Children, Component, type ComponentType } from 'react';
 import styled, { keyframes } from 'react-emotion';
-import { Transition, TransitionGroup } from 'react-transition-group';
+import { Transition } from 'react-transition-group';
 
 import type { ToastProps } from './ToastElement';
 
