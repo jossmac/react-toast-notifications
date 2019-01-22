@@ -30,6 +30,7 @@ export const ToastContainer = ({
       padding: gutter,
       pointerEvents: Children.count(children) ? 'auto' : 'none',
       position: 'fixed',
+      zIndex: 9999,
       ...placements[placement],
     }}
   >
