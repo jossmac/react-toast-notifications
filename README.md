@@ -120,8 +120,9 @@ To customize the existing component instead of creating a new one, you may impor
 
 ```jsx
 import { DefaultToast } from 'react-toast-notifications';
-export const MyCustomToast = ({children, ...props}) =>
-    <DefaultToast {...props}><SomethingSpecial>{children}</SomethingSpecial></DefaultToast>;
+export const MyCustomToast = ({children, ...props}) => (
+  <DefaultToast {...props}><SomethingSpecial>{children}</SomethingSpecial></DefaultToast>
+);
 ```
 
 ## Alternatives
