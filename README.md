@@ -116,6 +116,15 @@ const App = () => (
 );
 ```
 
+To customize the existing component instead of creating a new one, you may import `DefaultToast`:
+
+```jsx
+import { DefaultToast } from 'react-toast-notifications';
+export const MyCustomToast = ({children, ...props}) => (
+  <DefaultToast {...props}><SomethingSpecial>{children}</SomethingSpecial></DefaultToast>
+);
+```
+
 ## Alternatives
 
 This library may not meet your needs. Here are some alternative I came across whilst searching for this solution:
