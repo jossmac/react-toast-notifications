@@ -88,13 +88,14 @@ const Snack = ({
 const exampleCode = ({
   appearance,
   autoDismiss,
-  toastContent,
+  pauseOnHover,
 }) => `import { withToastManager } from 'react-toast-notifications';
 
 const Demo = ({ content, toastManager }) => (
   <Button onClick={() => toastManager.add(content, {
     appearance: '${appearance}',
     autoDismiss: ${autoDismiss},
+    pauseOnHover: ${pauseOnHover},
   })}>
     Add Toast
   </Button>
@@ -141,25 +142,30 @@ class ToastButtons extends Component {
   state = {
     appearance: appearances[0].value,
     autoDismiss: true,
+    pauseOnHover: false,
     toastContent: getRandom(),
   };
   toggleAutoDismiss = event => {
     this.setState({ autoDismiss: event.target.checked });
   };
+  togglePauseOnHover = event => {
+    this.setState({ pauseOnHover: event.target.checked });
+  };
   add = () => {
     const { toastManager } = this.props;
-    const { appearance, autoDismiss } = this.state;
+    const { appearance, autoDismiss, pauseOnHover } = this.state;
 
     toastManager.add(getRandom(), {
       appearance,
       autoDismiss,
+      pauseOnHover,
     });
   };
   handleAppearanceChange = appearance => {
     this.setState({ appearance });
   };
   render() {
-    const { appearance, autoDismiss } = this.state;
+    const { appearance, autoDismiss, pauseOnHover } = this.state;
     return (
       <StretchGroup>
         <ContentBlock align="left">
@@ -168,7 +174,7 @@ class ToastButtons extends Component {
           </Title>
           <div css={{ marginBottom: '1em', marginTop: '1em' }}>
             <RadioGroup
-              value={this.state.appearance}
+              value={appearance}
               onChange={this.handleAppearanceChange}
             >
               {appearances.map(a => (
@@ -192,20 +198,32 @@ class ToastButtons extends Component {
             </Button>
             <div
               css={{
-                alignItems: 'center',
                 display: 'flex',
                 fontSize: '0.85em',
+                flexDirection: 'column',
                 marginLeft: '1em',
               }}
             >
-              <input
-                id="auto-dismiss-checkbox"
-                type="checkbox"
-                onChange={this.toggleAutoDismiss}
-                style={{ marginRight: '0.5em' }}
-                checked={autoDismiss}
-              />
-              <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
+              <div>
+                <input
+                  id="auto-dismiss-checkbox"
+                  type="checkbox"
+                  onChange={this.toggleAutoDismiss}
+                  style={{ marginRight: '0.5em' }}
+                  checked={autoDismiss}
+                />
+                <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
+              </div>
+              <div>
+                <input
+                  id="pause-on-hover-checkbox"
+                  type="checkbox"
+                  onChange={this.togglePauseOnHover}
+                  style={{ marginRight: '0.5em' }}
+                  checked={pauseOnHover}
+                />
+                <label htmlFor="pause-on-hover-checkbox">Pause on hover</label>
+              </div>
             </div>
           </div>
         </ContentBlock>
