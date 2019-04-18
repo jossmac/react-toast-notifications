@@ -10,6 +10,8 @@ export type Callback = Id => void;
 export type AddFn = (content: Node, options?: Options) => Callback;
 export type RemoveFn = (id: Id) => Callback;
 
+export type HoverFn = () => void;
+
 export type Placement =
   | 'bottom-left'
   | 'bottom-center'

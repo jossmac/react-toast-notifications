@@ -17,7 +17,11 @@ yarn add react-toast-notifications
 Wrap your app in the `ToastProvider`, which provides context for the `Toast` descendants.
 
 ```jsx
-import { ToastConsumer, ToastProvider, withToastManager } from 'react-toast-notifications';
+import {
+  ToastConsumer,
+  ToastProvider,
+  withToastManager,
+} from 'react-toast-notifications';
 import validate from 'some-validation-lib';
 
 class FormComponent extends React.Component {
@@ -81,6 +85,7 @@ For brevity:
 | autoDismiss `boolean`              | Whether or not to dismiss the toast automatically after a timeout. |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
 | onDismiss: `Event => any`          | Passed in dynamically.                                             |
+| pauseOnHover: `boolean`            | Whether or not to pause the timeout when hovered.                  |
 | placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
 | transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
 | transitionState: `TransitionState` | Passed in dynamically.                                             |

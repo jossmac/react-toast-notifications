@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Children, Component, type ComponentType } from 'react';
-import styled, { keyframes } from 'react-emotion';
 import { Transition } from 'react-transition-group';
 
 import type { ToastProps } from './ToastElement';
@@ -29,6 +28,12 @@ export class ToastController extends Component<Props, State> {
     return { autoDismissTimeout: timeout };
   }
   componentDidMount() {
+    this.startTimer();
+  }
+  componentWillUnmount() {
+    this.clearTimer();
+  }
+  startTimer() {
     const { autoDismiss, onDismiss } = this.props;
     const { autoDismissTimeout } = this.state;
 
@@ -36,10 +41,16 @@ export class ToastController extends Component<Props, State> {
       this.timeout = setTimeout(onDismiss, autoDismissTimeout);
     }
   }
-  componentWillUnmount() {
+  clearTimer() {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
+  }
+  onMouseEnter() {
+    this.clearTimer();
+  }
+  onMouseLeave() {
+    this.startTimer();
   }
   render() {
     const { Toast, ...props } = this.props;
@@ -50,6 +61,8 @@ export class ToastController extends Component<Props, State> {
       <Transition appear mountOnEnter unmountOnExit timeout={time} {...props}>
         {transitionState => (
           <Toast
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
             autoDismissTimeout={autoDismissTimeout}
             transitionState={transitionState}
             {...props}

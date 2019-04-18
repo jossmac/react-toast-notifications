@@ -5,7 +5,7 @@ import styled, { keyframes } from 'react-emotion';
 
 import { CheckIcon, FlameIcon, InfoIcon, CloseIcon, AlertIcon } from './icons';
 import * as colors from './colors';
-import type { Placement } from './types';
+import type { HoverFn, Placement } from './types';
 
 // common
 export const borderRadius = 4;
@@ -167,6 +167,9 @@ export type ToastProps = {
   autoDismissTimeout: number, // inherited from ToastProvider
   children: Node,
   onDismiss: Event => *,
+  onMouseEnter: HoverFn,
+  onMouseLeave: HoverFn,
+  pauseOnHover: boolean,
   placement: Placement,
   transitionDuration: number, // inherited from ToastProvider
   transitionState: TransitionState, // inherited from ToastProvider
@@ -178,15 +181,20 @@ export const DefaultToast = ({
   autoDismissTimeout,
   children,
   onDismiss,
+  pauseOnHover,
   placement,
   transitionDuration,
   transitionState,
+  onMouseEnter,
+  onMouseLeave,
 }: ToastProps) => (
   <ToastElement
     appearance={appearance}
     placement={placement}
     transitionState={transitionState}
     transitionDuration={transitionDuration}
+    onMouseEnter={pauseOnHover ? onMouseEnter : null}
+    onMouseLeave={pauseOnHover ? onMouseLeave : null}
   >
     <Icon
       appearance={appearance}
