@@ -21,7 +21,7 @@ import { ToastConsumer, ToastProvider, withToastManager } from 'react-toast-noti
 import validate from 'some-validation-lib';
 
 class FormComponent extends React.Component {
-  onSubmit = (value) => {
+  onSubmit = value => {
     const { toastManager } = this.props;
     const { error, success } = validate(value);
 
@@ -48,7 +48,7 @@ const App = () => (
     {/* or if render props are more your speed */}
     <ToastConsumer>
       {({ add }) => (
-        <button onClick={(e) => add(`Notified by ${e.target}`)}>
+        <button onClick={e => add(`Notified by ${e.target}`)}>
           Toasty
         </button>
       )}
@@ -60,47 +60,43 @@ const App = () => (
 ## ToastProvider Props
 
 For brevity:
-- `PlacementType` is equal to `'bottom-left'
-  | 'bottom-center'
-  | 'bottom-right'
-  | 'top-left'
-  | 'top-center'
-  | 'top-right'`.
+
+- `PlacementType` is equal to `'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right'`.
 - `TransitionState` is equal to `'entering' | 'entered' | 'exiting' | 'exited'`.
 
-| Property        | Description                      |
-| --------------- | -------------------------------- |
-| autoDismissTimeout `number` | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds. |
-| children `Node` | Required. Your app content. |
-| components `{ ToastContainer, Toast }` | Replace the underlying components. |
-| placement `PlacementType` | Default `top-right`. Where, in relation to the viewport, to place the toasts. |
-| transitionDuration `number` | Default `220`. The duration of the CSS transition on the `Toast` component. |
+| Property                               | Description                                                                              |
+| -------------------------------------- | ---------------------------------------------------------------------------------------- |
+| autoDismissTimeout `number`            | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds. |
+| children `Node`                        | Required. Your app content.                                                              |
+| components `{ ToastContainer, Toast }` | Replace the underlying components.                                                       |
+| placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.            |
+| transitionDuration `number`            | Default `220`. The duration of the CSS transition on the `Toast` component.              |
 
 ## Toast Props
 
-| Property | Description |
-|--------- | ----------- |
-| appearance | Required. One of `success`, `error`, `warning`, `info`
-| children  | Required. The content of the toast notification. |
-| autoDismiss `boolean` | Whether or not to dismiss the toast automatically after a timeout. |
-| autoDismissTimeout `number` | Inherited from `ToastProvider`. |
-| onDismiss: `Event => any` | Passed in dynamically. |
-| placement `PlacementType` | Inherited from `ToastProvider`. |
-| transitionDuration `number` | Inherited from `ToastProvider`. |
-| transitionState: `TransitionState` | Passed in dynamically. |
+| Property                           | Description                                                        |
+| ---------------------------------- | ------------------------------------------------------------------ |
+| appearance                         | Required. One of `success`, `error`, `warning`, `info`             |
+| children                           | Required. The content of the toast notification.                   |
+| autoDismiss `boolean`              | Whether or not to dismiss the toast automatically after a timeout. |
+| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
+| onDismiss: `Event => any`          | Passed in dynamically.                                             |
+| placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
+| transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
+| transitionState: `TransitionState` | Passed in dynamically.                                             |
 
 ## Add & Remove
 
-The `add` methods on `ToastManager` have three arguments.
+The `add` method on `ToastManager` have three arguments:
 
-1. The first is the content of the toast, which can be any renderable `Node`.
-2. The second is the `Options` object, which can take any shape you like. `Options.appearance` is required when using the `DefaultToast`. When departing from the default shape, you must provide an alternative, compliant `Toast` component.
-3. The third is a callback, which is passed the added toast `ID`.
+1.  The first is the content of the toast, which can be any renderable `Node`.
+1.  The second is the `Options` object, which can take any shape you like. `Options.appearance` is required when using the `DefaultToast`. When departing from the default shape, you must provide an alternative, compliant `Toast` component.
+1.  The third is an optional callback, which is passed the added toast `ID`.
 
-The `remove` methods on `ToastManager` have two arguments.
+The `remove` method on `ToastManager` have two arguments:
 
-1. The first is the `ID` of the toast to remove.
-1. The second is a callback.
+1.  The first is the `ID` of the toast to remove.
+1.  The second is an optional callback.
 
 ## Replaceable Components
 
@@ -110,15 +106,13 @@ To bring each toast notification inline with your app, you can provide alternati
 import { ToastProvider } from 'react-toast-notifications';
 
 const MyCustomToast = ({ appearance, children }) => (
-  <div style={{ background: appearance === 'error' ? 'red' : 'green'}}>
+  <div style={{ background: appearance === 'error' ? 'red' : 'green' }}>
     {children}
   </div>
 );
 
 const App = () => (
-  <ToastProvider components={{ Toast: MyCustomToast }}>
-    ...
-  </ToastProvider>
+  <ToastProvider components={{ Toast: MyCustomToast }}>...</ToastProvider>
 );
 ```
 
@@ -126,8 +120,10 @@ To customize the existing component instead of creating a new one, you may impor
 
 ```jsx
 import { DefaultToast } from 'react-toast-notifications';
-export const MyCustomToast = ({children, ...props}) => (
-  <DefaultToast {...props}><SomethingSpecial>{children}</SomethingSpecial></DefaultToast>
+export const MyCustomToast = ({ children, ...props }) => (
+  <DefaultToast {...props}>
+    <SomethingSpecial>{children}</SomethingSpecial>
+  </DefaultToast>
 );
 ```
 
