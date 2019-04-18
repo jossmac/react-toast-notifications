@@ -84,8 +84,9 @@ const Content = styled.div({
 // NOTE: invoke animation when NOT `autoDismiss` with opacity of 0 to avoid a
 // paint bug in FireFox.
 // https://bugzilla.mozilla.org/show_bug.cgi?id=625289
-const Countdown = styled.div(({ autoDismissTimeout, opacity }) => ({
+const Countdown = styled.div(({ autoDismissTimeout, opacity, isRunning }) => ({
   animation: `${shrink} ${autoDismissTimeout}ms linear`,
+  animationPlayState: isRunning ? 'running' : 'paused',
   backgroundColor: 'rgba(0,0,0,0.1)',
   bottom: 0,
   height: 0,
@@ -94,7 +95,7 @@ const Countdown = styled.div(({ autoDismissTimeout, opacity }) => ({
   position: 'absolute',
   width: '100%',
 }));
-const Icon = ({ appearance, autoDismiss, autoDismissTimeout }) => {
+const Icon = ({ appearance, autoDismiss, autoDismissTimeout, isRunning }) => {
   const meta = appearances[appearance];
   const Glyph = meta.icon;
 
@@ -117,6 +118,7 @@ const Icon = ({ appearance, autoDismiss, autoDismissTimeout }) => {
       <Countdown
         opacity={autoDismiss ? 1 : 0}
         autoDismissTimeout={autoDismissTimeout}
+        isRunning={isRunning}
       />
       <Glyph css={{ position: 'relative', zIndex: 1 }} />
     </div>
@@ -180,6 +182,7 @@ export const DefaultToast = ({
   autoDismiss,
   autoDismissTimeout,
   children,
+  isRunning,
   onDismiss,
   pauseOnHover,
   placement,
@@ -193,13 +196,14 @@ export const DefaultToast = ({
     placement={placement}
     transitionState={transitionState}
     transitionDuration={transitionDuration}
-    onMouseEnter={pauseOnHover ? onMouseEnter : null}
-    onMouseLeave={pauseOnHover ? onMouseLeave : null}
+    onMouseEnter={onMouseEnter}
+    onMouseLeave={onMouseLeave}
   >
     <Icon
       appearance={appearance}
       autoDismiss={autoDismiss}
       autoDismissTimeout={autoDismissTimeout}
+      isRunning={isRunning}
     />
     <Content>{children}</Content>
     {onDismiss ? (

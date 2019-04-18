@@ -10,7 +10,7 @@ import * as colors from '../../src/colors';
 registerLanguage('jsx', jsx);
 
 const gutter = 15;
-const containerWidth = 960;
+const containerWidth = 1140;
 
 // styled components
 // ------------------------------

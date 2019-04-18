@@ -136,6 +136,7 @@ const appearances = [
   { value: 'success', label: 'Success' },
   { value: 'error', label: 'Error' },
   { value: 'warning', label: 'Warning' },
+  { value: 'info', label: 'Info' },
 ];
 
 class ToastButtons extends Component {
@@ -192,29 +193,24 @@ class ToastButtons extends Component {
               ))}
             </RadioGroup>
           </div>
-          <div css={{ alignItems: 'center', display: 'flex' }}>
+          <div
+            css={{ alignItems: 'center', display: 'flex', fontSize: '0.85em' }}
+          >
             <Button appearance={appearance} onClick={this.add}>
               Add Toast
             </Button>
-            <div
-              css={{
-                display: 'flex',
-                fontSize: '0.85em',
-                flexDirection: 'column',
-                marginLeft: '1em',
-              }}
-            >
-              <div>
-                <input
-                  id="auto-dismiss-checkbox"
-                  type="checkbox"
-                  onChange={this.toggleAutoDismiss}
-                  style={{ marginRight: '0.5em' }}
-                  checked={autoDismiss}
-                />
-                <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
-              </div>
-              <div>
+            <div css={{ fontSize: '0.85em', marginLeft: '1em' }}>
+              <input
+                id="auto-dismiss-checkbox"
+                type="checkbox"
+                onChange={this.toggleAutoDismiss}
+                style={{ marginRight: '0.5em' }}
+                checked={autoDismiss}
+              />
+              <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
+            </div>
+            {autoDismiss && (
+              <div css={{ fontSize: '0.85em', marginLeft: '0.5em' }}>
                 <input
                   id="pause-on-hover-checkbox"
                   type="checkbox"
@@ -224,7 +220,7 @@ class ToastButtons extends Component {
                 />
                 <label htmlFor="pause-on-hover-checkbox">Pause on hover</label>
               </div>
-            </div>
+            )}
           </div>
         </ContentBlock>
         <CodeBlock>{exampleCode(this.state)}</CodeBlock>
