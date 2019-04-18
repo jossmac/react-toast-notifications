@@ -99,8 +99,11 @@ export class ToastProvider extends Component<Props, State> {
       return { toasts };
     }, callback);
   };
-  // avoid creating a new fn on every render
-  onDismiss = (id: Id) => () => this.remove(id);
+
+  onDismiss = (id: Id, cb: Callback = NOOP) => () => {
+    cb(id);
+    this.remove(id);
+  };
 
   render() {
     const { children, components, ...props } = this.props;
@@ -115,11 +118,11 @@ export class ToastProvider extends Component<Props, State> {
         {canUseDOM ? (
           createPortal(
             <ToastContainer {...props}>
-              {toasts.map(({ content, id, ...rest }) => (
+              {toasts.map(({ content, id, onDismiss, ...rest }) => (
                 <ToastController
                   key={id}
                   Toast={Toast}
-                  onDismiss={this.onDismiss(id)}
+                  onDismiss={this.onDismiss(id, onDismiss)}
                   {...props}
                   {...rest}
                 >

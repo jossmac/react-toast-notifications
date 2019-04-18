@@ -52,7 +52,9 @@ const App = () => (
     {/* or if render props are more your speed */}
     <ToastConsumer>
       {({ add }) => (
-        <button onClick={e => add(`Notified by ${e.target}`)}>Toasty</button>
+        <button onClick={e => add(`Notified by ${e.target}`)}>
+          Toasty
+        </button>
       )}
     </ToastConsumer>
   </ToastProvider>
@@ -78,6 +80,7 @@ For brevity:
 
 | Property                           | Description                                                        |
 | ---------------------------------- | ------------------------------------------------------------------ |
+| appearance                         | Required. One of `success`, `error`, `warning`, `info`             |
 | children                           | Required. The content of the toast notification.                   |
 | autoDismiss `boolean`              | Whether or not to dismiss the toast automatically after a timeout. |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
@@ -89,11 +92,16 @@ For brevity:
 
 ## Add & Remove
 
-The `add` and `remove` methods on `ToastManager` have three arguments.
+The `add` method on `ToastManager` have three arguments:
 
 1.  The first is the content of the toast, which can be any renderable `Node`.
-1.  The second is the `Options` object, which can take any shape you like. When departing from the default shape, you must provide an alternative, compliant `Toast` component.
-1.  The third is a callback, which is passed the added or removed toast `ID`.
+1.  The second is the `Options` object, which can take any shape you like. `Options.appearance` is required when using the `DefaultToast`. When departing from the default shape, you must provide an alternative, compliant `Toast` component.
+1.  The third is an optional callback, which is passed the added toast `ID`.
+
+The `remove` method on `ToastManager` have two arguments:
+
+1.  The first is the `ID` of the toast to remove.
+1.  The second is an optional callback.
 
 ## Replaceable Components
 
