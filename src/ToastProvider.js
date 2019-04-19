@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, type ComponentType, type Node } from 'react';
+import React, { Component, forwardRef, type ComponentType, type Node, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 
 import { ToastController } from './ToastController';
@@ -144,8 +144,8 @@ export const ToastConsumer = ({ children }: Context => Node) => (
   <Consumer>{context => children(context)}</Consumer>
 );
 
-export const withToastManager = (Comp: ComponentType<*>) => (props: *) => (
+export const withToastManager = (Comp: ComponentType<*>) => forwardRef((props: *, ref: RefObject<*>) => (
   <ToastConsumer>
-    {context => <Comp toastManager={context} {...props} />}
+    {context => <Comp toastManager={context} {...props} ref={ref} />}
   </ToastConsumer>
-);
+));
