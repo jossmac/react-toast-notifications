@@ -103,6 +103,10 @@ The `remove` method on `ToastManager` have two arguments:
 1.  The first is the `ID` of the toast to remove.
 1.  The second is an optional callback.
 
+There's also a `removeAll` method on `ToastManager` that removes all the toasts that manager is currently managing. It takes one argument:
+
+1. An optional callback to be called when all the toasts have been removed. The callback is passed all the removed toasts `ID`s.
+
 ## Replaceable Components
 
 To bring each toast notification inline with your app, you can provide alternative components to the `ToastProvider`:

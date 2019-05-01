@@ -100,6 +100,12 @@ export class ToastProvider extends Component<Props, State> {
     }, callback);
   };
 
+  removeAll = (cb: Callback = NOOP) => {
+    const ids = this.state.toasts;
+    const callback = () => cb(ids);
+    this.setState(state => ({ toasts: [] }), callback);
+  }
+
   onDismiss = (id: Id, cb: Callback = NOOP) => () => {
     cb(id);
     this.remove(id);
@@ -109,10 +115,10 @@ export class ToastProvider extends Component<Props, State> {
     const { children, components, ...props } = this.props;
     const { Toast, ToastContainer } = this.components;
     const { toasts } = this.state;
-    const { add, remove } = this;
+    const { add, remove, removeAll } = this;
 
     return (
-      <Provider value={{ add, remove, toasts }}>
+      <Provider value={{ add, remove, removeAll, toasts }}>
         {children}
 
         {canUseDOM ? (
