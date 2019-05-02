@@ -76,6 +76,8 @@ For brevity:
 | placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.            |
 | transitionDuration `number`            | Default `220`. The duration of the CSS transition on the `Toast` component.              |
 
+Additional props passed are passed down to the underlying ToastContainer and those are passed into the Toast components. This allows any props set on Provider to be used as defaultProps on the toast. For example, `autoDismiss: true`.
+
 ## Toast Props
 
 | Property                           | Description                                                        |
