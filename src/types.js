@@ -1,11 +1,14 @@
 // @flow
 
+import type { Node } from 'react';
+
 export type Id = string;
+export type Callback = Id => void;
 export type Options = {
   appearance?: 'error' | 'info' | 'success',
   autoDismiss?: boolean,
+  onDismiss?: Callback,
 };
-export type Callback = Id => void;
 
 export type AddFn = (content: Node, options?: Options) => Callback;
 export type RemoveFn = (id: Id) => Callback;

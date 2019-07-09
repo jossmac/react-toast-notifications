@@ -3,14 +3,24 @@
 import React, { Children, Component, type ComponentType } from 'react';
 import { Transition } from 'react-transition-group';
 
+import{ NOOP } from './utils';
 import type { ToastProps } from './ToastElement';
 
 type Props = ToastProps & { Toast: ComponentType<ToastProps> };
-type State = { autoDismissTimeout: number };
+type State = {
+  autoDismissTimeout: number,
+  isRunning: boolean,
+};
 
 const defaultAutoDismissTimeout = 5000;
 
-function Timer(callback, delay) {
+const TimerType = {
+  clear: NOOP,
+  pause: NOOP,
+  resume: NOOP,
+}
+
+function Timer(callback: () => void, delay: number) {
   let timerId = delay;
   let start = delay;
   let remaining = delay;
@@ -34,10 +44,10 @@ function Timer(callback, delay) {
 }
 
 export class ToastController extends Component<Props, State> {
-  timeout: number;
+  timeout: typeof TimerType;
   state = {
     autoDismissTimeout: this.props.autoDismissTimeout,
-    isRunning: this.props.autoDismiss,
+    isRunning: Boolean(this.props.autoDismiss),
   };
   static defaultProps = {
     autoDismiss: false,
@@ -94,11 +104,11 @@ export class ToastController extends Component<Props, State> {
     const hasMouseEvents = props.pauseOnHover && props.autoDismiss;
 
     // NOTE: conditions here so methods can be clean
-    const handleMouseEnter = hasMouseEvents ? this.onMouseEnter : null;
-    const handleMouseLeave = hasMouseEvents ? this.onMouseLeave : null;
+    const handleMouseEnter = hasMouseEvents ? this.onMouseEnter : NOOP;
+    const handleMouseLeave = hasMouseEvents ? this.onMouseLeave : NOOP;
 
     return (
-      <Transition appear mountOnEnter unmountOnExit timeout={time} {...props}>
+      <Transition appear mountOnEnter unmountOnExit timeout={time}>
         {transitionState => (
           <Toast
             onMouseEnter={handleMouseEnter}
