@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, forwardRef, type ComponentType, type Node, type RefObject } from 'react';
+import React, { Component, type ComponentType, type Node, type Ref } from 'react';
 import { createPortal } from 'react-dom';
 
 import { ToastController } from './ToastController';
@@ -8,7 +8,7 @@ import { ToastContainer, type ToastContainerProps } from './ToastContainer';
 import { type ToastProps, DefaultToast } from './ToastElement';
 const defaultComponents = { Toast: DefaultToast, ToastContainer };
 
-import { generateUEID } from './utils';
+import { generateUEID, NOOP } from './utils';
 import type {
   AddFn,
   RemoveFn,
@@ -21,7 +21,6 @@ import type {
 
 // $FlowFixMe
 const { Consumer, Provider } = React.createContext();
-const NOOP = () => {};
 const canUseDOM = !!(
   typeof window !== 'undefined' &&
   window.document &&
@@ -110,14 +109,15 @@ export class ToastProvider extends Component<Props, State> {
     const { Toast, ToastContainer } = this.components;
     const { toasts } = this.state;
     const { add, remove } = this;
+    const portalTarget = document.body;
 
-    return (
+    return portalTarget ? (
       <Provider value={{ add, remove, toasts }}>
         {children}
 
         {canUseDOM ? (
           createPortal(
-            <ToastContainer {...props}>
+            <ToastContainer placement={props.placement}>
               {toasts.map(({ content, id, onDismiss, ...rest }) => (
                 <ToastController
                   key={id}
@@ -130,21 +130,22 @@ export class ToastProvider extends Component<Props, State> {
                 </ToastController>
               ))}
             </ToastContainer>,
-            document.body
+            portalTarget
           )
         ) : (
-          <ToastContainer {...props} /> // keep ReactDOM.hydrate happy
+          <ToastContainer placement={props.placement} /> // keep ReactDOM.hydrate happy
         )}
       </Provider>
-    );
+    ) : null;
   }
 }
 
-export const ToastConsumer = ({ children }: Context => Node) => (
+export const ToastConsumer = ({ children }: { children: Context => Node }) => (
   <Consumer>{context => children(context)}</Consumer>
 );
 
-export const withToastManager = (Comp: ComponentType<*>) => forwardRef((props: *, ref: RefObject<*>) => (
+// $FlowFixMe `forwardRef`
+export const withToastManager = (Comp: ComponentType<*>) => React.forwardRef((props: *, ref: Ref<*>) => (
   <ToastConsumer>
     {context => <Comp toastManager={context} {...props} ref={ref} />}
   </ToastConsumer>

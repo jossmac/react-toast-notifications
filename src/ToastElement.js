@@ -1,11 +1,12 @@
 // @flow
 
-import React, { Children, Component } from 'react';
+import React, { Children, Component, type Node } from 'react';
 import styled, { keyframes } from 'react-emotion';
 
 import { CheckIcon, FlameIcon, InfoIcon, CloseIcon, AlertIcon } from './icons';
 import * as colors from './colors';
 import type { HoverFn, Placement } from './types';
+import { NOOP } from './utils';
 
 // common
 export const borderRadius = 4;
@@ -168,7 +169,8 @@ export type ToastProps = {
   autoDismiss: boolean | number,
   autoDismissTimeout: number, // inherited from ToastProvider
   children: Node,
-  onDismiss: Event => *,
+  isRunning: boolean,
+  onDismiss: typeof NOOP,
   onMouseEnter: HoverFn,
   onMouseLeave: HoverFn,
   pauseOnHover: boolean,
@@ -214,3 +216,7 @@ export const DefaultToast = ({
     ) : null}
   </ToastElement>
 );
+
+DefaultToast.defaultProps = {
+  onDismiss: NOOP
+}

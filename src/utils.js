@@ -1,3 +1,4 @@
+export const NOOP = () => {};
 export function generateUEID() {
   let first = (Math.random() * 46656) | 0;
   let second = (Math.random() * 46656) | 0;
