@@ -1,6 +1,7 @@
 // @flow
 
-import React, { Component, type ComponentType, type Node, type Ref } from 'react';
+// $FlowFixMe `useContext`
+import React, { Component, useContext, type ComponentType, type Node, type Ref } from 'react';
 import { createPortal } from 'react-dom';
 
 import { ToastController } from './ToastController';
@@ -19,8 +20,10 @@ import type {
   Id,
 } from './types';
 
-// $FlowFixMe
-const { Consumer, Provider } = React.createContext();
+// $FlowFixMe `createContext`
+const ToastContext = React.createContext();
+const { Consumer, Provider } = ToastContext;
+
 const canUseDOM = !!(
   typeof window !== 'undefined' &&
   window.document &&
@@ -150,3 +153,9 @@ export const withToastManager = (Comp: ComponentType<*>) => React.forwardRef((pr
     {context => <Comp toastManager={context} {...props} ref={ref} />}
   </ToastConsumer>
 ));
+
+export const useToasts = () => {
+  const { add, remove, toasts } = useContext(ToastContext);
+
+  return { addToast: add, removeToast: remove, toasts };
+}

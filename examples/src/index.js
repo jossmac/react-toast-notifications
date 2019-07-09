@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState } from 'react';
 import { render } from 'react-dom';
 import { RadioGroup, Radio } from 'react-radios';
 
@@ -21,7 +21,7 @@ import {
 import CodeBlock from './CodeBlock';
 import './index.css';
 import ConnectivityListener from './ConnectivityListener';
-import { ToastProvider, ToastConsumer, withToastManager } from '../../src';
+import { ToastProvider, ToastConsumer, withToastManager, useToasts } from '../../src';
 import * as colors from '../../src/colors';
 import exampleText from 'raw-loader!./raw/example';
 
@@ -88,20 +88,22 @@ const Snack = ({
 const exampleCode = ({
   appearance,
   autoDismiss,
-  pauseOnHover,
-}) => `import { withToastManager } from 'react-toast-notifications';
+  pauseOnHover
+}) => `import { useToasts } from 'react-toast-notifications'
 
-const Demo = ({ content, toastManager }) => (
-  <Button onClick={() => toastManager.add(content, {
-    appearance: '${appearance}',
-    autoDismiss: ${autoDismiss},
-    pauseOnHover: ${pauseOnHover},
-  })}>
-    Add Toast
-  </Button>
-);
-
-export const ToastDemo = withToastManager(Demo);`;
+export const ToastDemo = ({ content }) => {
+  const { addToast } = useToasts()
+  return (
+    <Button onClick={() => addToast(content, {
+      appearance: '${appearance}',
+      autoDismiss: ${autoDismiss},
+      pauseOnHover: ${pauseOnHover},
+    })}>
+      Add Toast
+    </Button>
+  )
+}
+`;
 
 // data
 // ------------------------------
@@ -139,97 +141,82 @@ const appearances = [
   { value: 'info', label: 'Info' },
 ];
 
-class ToastButtons extends Component {
-  state = {
-    appearance: appearances[0].value,
-    autoDismiss: true,
-    pauseOnHover: false,
-    toastContent: getRandom(),
-  };
-  toggleAutoDismiss = event => {
-    this.setState({ autoDismiss: event.target.checked });
-  };
-  togglePauseOnHover = event => {
-    this.setState({ pauseOnHover: event.target.checked });
-  };
-  add = () => {
-    const { toastManager } = this.props;
-    const { appearance, autoDismiss, pauseOnHover } = this.state;
+function Toasts() {
+  const [appearance, setAppearance] = useState(appearances[0].value);
+  const [autoDismiss, setAutoDismiss] = useState(true);
+  const [pauseOnHover, setPauseOnHover] = useState(true);
+  const { addToast } = useToasts();
 
-    toastManager.add(getRandom(), {
-      appearance,
-      autoDismiss,
-      pauseOnHover,
-    });
-  };
-  handleAppearanceChange = appearance => {
-    this.setState({ appearance });
-  };
-  render() {
-    const { appearance, autoDismiss, pauseOnHover } = this.state;
-    return (
-      <StretchGroup>
-        <ContentBlock align="left">
-          <Title tag="h1">
-            Let users know what&apos;s happening in your app.
-          </Title>
-          <div css={{ marginBottom: '1em', marginTop: '1em' }}>
-            <RadioGroup
-              value={appearance}
-              onChange={this.handleAppearanceChange}
-            >
-              {appearances.map(a => (
-                <label
-                  key={a.value}
-                  css={{
-                    alignItems: 'center',
-                    display: 'inline-flex',
-                    marginRight: '1em',
-                  }}
-                >
-                  <Radio value={a.value} />
-                  <div css={{ marginLeft: '0.25em' }}>{a.label}</div>
-                </label>
-              ))}
-            </RadioGroup>
-          </div>
-          <div
-            css={{ alignItems: 'center', display: 'flex', fontSize: '0.85em' }}
+  const state = { appearance, autoDismiss, pauseOnHover };
+  const toggleAutoDismiss = event => setAutoDismiss(event.target.checked);
+  const add = () => addToast(getRandom(), state);
+  const handleAppearanceChange = appearance => setAppearance(appearance);
+
+  return (
+    <StretchGroup>
+      <ContentBlock align="left">
+        <Title tag="h1">
+          Let users know what&apos;s happening in your app.
+        </Title>
+        <div css={{ marginBottom: '1em', marginTop: '1em' }}>
+          <RadioGroup
+            value={appearance}
+            onChange={handleAppearanceChange}
           >
-            <Button appearance={appearance} onClick={this.add}>
-              Add Toast
-            </Button>
-            <div css={{ fontSize: '0.85em', marginLeft: '1em' }}>
-              <input
-                id="auto-dismiss-checkbox"
-                type="checkbox"
-                onChange={this.toggleAutoDismiss}
-                style={{ marginRight: '0.5em' }}
-                checked={autoDismiss}
-              />
-              <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
-            </div>
-            {autoDismiss && (
-              <div css={{ fontSize: '0.85em', marginLeft: '0.5em' }}>
-                <input
-                  id="pause-on-hover-checkbox"
-                  type="checkbox"
-                  onChange={this.togglePauseOnHover}
-                  style={{ marginRight: '0.5em' }}
-                  checked={pauseOnHover}
-                />
-                <label htmlFor="pause-on-hover-checkbox">Pause on hover</label>
-              </div>
-            )}
+            {appearances.map(a => (
+              <label
+                key={a.value}
+                css={{
+                  alignItems: 'center',
+                  display: 'inline-flex',
+                  marginRight: '1em',
+                }}
+              >
+                <Radio value={a.value} />
+                <div css={{ marginLeft: '0.25em' }}>{a.label}</div>
+              </label>
+            ))}
+          </RadioGroup>
+        </div>
+        <div css={{ alignItems: 'center', display: 'flex' }}>
+          <Button appearance={appearance} onClick={add}>
+            Add Toast
+          </Button>
+          <div
+            css={{
+              alignItems: 'center',
+              display: 'flex',
+              fontSize: '0.85em',
+              marginLeft: '1em',
+            }}
+          >
+            <input
+              id="auto-dismiss-checkbox"
+              type="checkbox"
+              onChange={toggleAutoDismiss}
+              style={{ marginRight: '0.5em' }}
+              checked={autoDismiss}
+            />
+            <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
           </div>
-        </ContentBlock>
-        <CodeBlock>{exampleCode(this.state)}</CodeBlock>
-      </StretchGroup>
-    );
-  }
+          {autoDismiss && (
+            <div css={{ fontSize: '0.85em', marginLeft: '0.5em' }}>
+              <input
+                id="pause-on-hover-checkbox"
+                type="checkbox"
+                onChange={() => setPauseOnHover(v => !v)}
+                style={{ marginRight: '0.5em' }}
+                checked={pauseOnHover}
+              />
+              <label htmlFor="pause-on-hover-checkbox">Pause on hover</label>
+            </div>
+          )}
+        </div>
+      </ContentBlock>
+      <CodeBlock>{exampleCode(state)}</CodeBlock>
+    </StretchGroup>
+  );
 }
-
-const Toasts = withToastManager(ToastButtons);
 
 // example
 // ------------------------------
@@ -364,7 +351,7 @@ const App = () => (
                   <p>
                     To see an example of how you might use this IRL, toggle the{' '}
                     <code>Offline</code> checkbox in the Network pane of your
-                    dev tools.
+                    dev tools. If you're on mobile, just turn on flight-mode.
                   </p>
                   <p>
                     <small>* It's totally cool if you are, no judgement.</small>
