@@ -127,8 +127,6 @@ export class ToastProvider extends Component<Props, State> {
     const { add, remove } = this;
     const containerStyles = toasts.length ? null : { pointerEvents: 'none' };
 
-    console.log('ToastProvider is linked?');
-
     return (
       <Provider value={{ add, remove, toasts }}>
         {children}
