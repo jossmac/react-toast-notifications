@@ -1,8 +1,15 @@
 // @flow
 
-// $FlowFixMe `useContext`
-import React, { Component, useContext, type ComponentType, type Node, type Ref } from 'react';
+import React, {
+  Component,
+  // $FlowFixMe `useContext`
+  useContext,
+  type ComponentType,
+  type Node,
+  type Ref,
+} from 'react';
 import { createPortal } from 'react-dom';
+import { Transition, TransitionGroup } from 'react-transition-group';
 
 import { ToastController } from './ToastController';
 import { ToastContainer, type ToastContainerProps } from './ToastContainer';
@@ -108,38 +115,74 @@ export class ToastProvider extends Component<Props, State> {
   };
 
   render() {
-    const { children, components, ...props } = this.props;
+    const {
+      autoDismissTimeout,
+      children,
+      components,
+      placement,
+      transitionDuration,
+    } = this.props;
     const { Toast, ToastContainer } = this.components;
     const { toasts } = this.state;
     const { add, remove } = this;
-    const portalTarget = document.body;
+    const containerStyles = toasts.length ? null : { pointerEvents: 'none' };
 
-    return portalTarget ? (
+    console.log('ToastProvider is linked?');
+
+    return (
       <Provider value={{ add, remove, toasts }}>
         {children}
 
         {canUseDOM ? (
           createPortal(
-            <ToastContainer placement={props.placement}>
-              {toasts.map(({ content, id, onDismiss, ...rest }) => (
-                <ToastController
-                  key={id}
-                  Toast={Toast}
-                  onDismiss={this.onDismiss(id, onDismiss)}
-                  {...props}
-                  {...rest}
-                >
-                  {content}
-                </ToastController>
-              ))}
+            <ToastContainer placement={placement} style={containerStyles}>
+              <TransitionGroup>
+                {toasts.map(
+                  ({
+                    appearance,
+                    autoDismiss,
+                    content,
+                    id,
+                    onDismiss,
+                    pauseOnHover,
+                    ...unknownConsumerProps
+                  }) => (
+                    <Transition
+                      appear
+                      key={id}
+                      mountOnEnter
+                      timeout={transitionDuration}
+                      unmountOnExit
+                    >
+                      {transitionState => (
+                        <ToastController
+                          appearance={appearance}
+                          autoDismiss={autoDismiss}
+                          autoDismissTimeout={autoDismissTimeout}
+                          component={Toast}
+                          key={id}
+                          onDismiss={this.onDismiss(id, onDismiss)}
+                          pauseOnHover={pauseOnHover}
+                          placement={placement}
+                          transitionDuration={transitionDuration}
+                          transitionState={transitionState}
+                          {...unknownConsumerProps}
+                        >
+                          {content}
+                        </ToastController>
+                      )}
+                    </Transition>
+                  )
+                )}
+              </TransitionGroup>
             </ToastContainer>,
-            portalTarget
+            document.body
           )
         ) : (
-          <ToastContainer placement={props.placement} /> // keep ReactDOM.hydrate happy
+          <ToastContainer placement={placement} style={containerStyles} /> // keep ReactDOM.hydrate happy
         )}
       </Provider>
-    ) : null;
+    );
   }
 }
 
@@ -147,15 +190,16 @@ export const ToastConsumer = ({ children }: { children: Context => Node }) => (
   <Consumer>{context => children(context)}</Consumer>
 );
 
-// $FlowFixMe `forwardRef`
-export const withToastManager = (Comp: ComponentType<*>) => React.forwardRef((props: *, ref: Ref<*>) => (
-  <ToastConsumer>
-    {context => <Comp toastManager={context} {...props} ref={ref} />}
-  </ToastConsumer>
-));
+export const withToastManager = (Comp: ComponentType<*>) =>
+  // $FlowFixMe `forwardRef`
+  React.forwardRef((props: *, ref: Ref<*>) => (
+    <ToastConsumer>
+      {context => <Comp toastManager={context} {...props} ref={ref} />}
+    </ToastConsumer>
+  ));
 
 export const useToasts = () => {
   const { add, remove, toasts } = useContext(ToastContext);
 
   return { addToast: add, removeToast: remove, toasts };
-}
+};

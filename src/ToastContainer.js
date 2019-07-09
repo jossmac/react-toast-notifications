@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Children, type Element } from 'react';
+import React, { type Node } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 
 import type { Placement } from './types';
@@ -15,13 +15,14 @@ const placements = {
   'bottom-right': { bottom: 0, right: 0 },
 };
 
-// NOTE: children should just be `React.Node`, not sure why this is unacceptable
-// to flow.
-export type ToastContainerProps = { children?: Array<Element<any>>, placement: Placement };
+export type ToastContainerProps = {
+  children?: Node,
+  placement: Placement,
+};
 
 export const ToastContainer = ({
-  children,
   placement,
+  ...props
 }: ToastContainerProps) => (
   <div
     css={{
@@ -30,11 +31,9 @@ export const ToastContainer = ({
       overflowX: 'hidden',
       overflowY: 'auto',
       padding: gutter,
-      pointerEvents: Children.count(children) ? 'auto' : 'none',
       position: 'fixed',
       ...placements[placement],
     }}
-  >
-    <TransitionGroup component={null}>{children}</TransitionGroup>
-  </div>
+    {...props}
+  />
 );

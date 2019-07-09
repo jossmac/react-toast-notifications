@@ -84,7 +84,7 @@ For brevity:
 | children                           | Required. The content of the toast notification.                   |
 | autoDismiss `boolean`              | Whether or not to dismiss the toast automatically after a timeout. |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
-| onDismiss: `Event => any`          | Passed in dynamically.                                             |
+| onDismiss: `Id => void`          | Passed in dynamically.                                             |
 | pauseOnHover: `boolean`            | Whether or not to pause the timeout when hovered.                  |
 | placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
 | transitionDuration `number`        | Inherited from `ToastProvider`.                                    |

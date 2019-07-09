@@ -218,5 +218,5 @@ export const DefaultToast = ({
 );
 
 DefaultToast.defaultProps = {
-  onDismiss: NOOP
-}
+  onDismiss: NOOP,
+};

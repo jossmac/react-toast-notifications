@@ -8,6 +8,7 @@ export type Options = {
   appearance?: 'error' | 'info' | 'success',
   autoDismiss?: boolean,
   onDismiss?: Callback,
+  pauseOnHover?: boolean,
 };
 
 export type AddFn = (content: Node, options?: Options) => Callback;
