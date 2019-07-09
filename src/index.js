@@ -4,4 +4,5 @@ export {
   ToastConsumer,
   ToastProvider,
   withToastManager,
+  useToasts,
 } from './ToastProvider';
