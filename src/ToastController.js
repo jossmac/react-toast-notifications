@@ -108,7 +108,7 @@ export class ToastController extends Component<Props, State> {
     const handleMouseLeave = hasMouseEvents ? this.onMouseLeave : NOOP;
 
     return (
-      <Transition appear mountOnEnter unmountOnExit timeout={time}>
+      <Transition appear mountOnEnter unmountOnExit timeout={time} {...props}>
         {transitionState => (
           <Toast
             onMouseEnter={handleMouseEnter}
