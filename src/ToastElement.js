@@ -1,7 +1,8 @@
 // @flow
+/** @jsx jsx */
 
 import React, { Children, Component, type Node } from 'react';
-import styled, { keyframes } from 'react-emotion';
+import { jsx, keyframes } from '@emotion/core';
 
 import { CheckIcon, FlameIcon, InfoIcon, CloseIcon, AlertIcon } from './icons';
 import * as colors from './colors';
@@ -12,7 +13,7 @@ import { NOOP } from './utils';
 export const borderRadius = 4;
 export const gutter = 8;
 export const toastWidth = 360;
-export const shrink = keyframes`from { height: 100%; } to { height: 0% }`;
+export const shrinkKeyframes = keyframes`from { height: 100%; } to { height: 0% }`;
 
 // a11y helper
 const A11yText = ({ tag: Tag, ...props }) => (
@@ -64,38 +65,54 @@ const appearances = {
 };
 export type AppearanceTypes = $Keys<typeof appearances>;
 
-const Button = styled.div({
-  cursor: 'pointer',
-  flexShrink: 0,
-  opacity: 0.5,
-  padding: `${gutter}px ${gutter * 1.5}px`,
-  transition: 'opacity 150ms',
+const Button = props => (
+  <div
+    css={{
+      cursor: 'pointer',
+      flexShrink: 0,
+      opacity: 0.5,
+      padding: `${gutter}px ${gutter * 1.5}px`,
+      transition: 'opacity 150ms',
 
-  ':hover': { opacity: 1 },
-});
+      ':hover': { opacity: 1 },
+    }}
+    {...props}
+  />
+);
 
-const Content = styled.div({
-  flexGrow: 1,
-  fontSize: 14,
-  lineHeight: 1.4,
-  minHeight: 40,
-  padding: `${gutter}px ${gutter * 1.5}px`,
-});
+const Content = props => (
+  <div
+    css={{
+      flexGrow: 1,
+      fontSize: 14,
+      lineHeight: 1.4,
+      minHeight: 40,
+      padding: `${gutter}px ${gutter * 1.5}px`,
+    }}
+    {...props}
+  />
+);
 
 // NOTE: invoke animation when NOT `autoDismiss` with opacity of 0 to avoid a
 // paint bug in FireFox.
 // https://bugzilla.mozilla.org/show_bug.cgi?id=625289
-const Countdown = styled.div(({ autoDismissTimeout, opacity, isRunning }) => ({
-  animation: `${shrink} ${autoDismissTimeout}ms linear`,
-  animationPlayState: isRunning ? 'running' : 'paused',
-  backgroundColor: 'rgba(0,0,0,0.1)',
-  bottom: 0,
-  height: 0,
-  left: 0,
-  opacity,
-  position: 'absolute',
-  width: '100%',
-}));
+const Countdown = ({ autoDismissTimeout, opacity, isRunning, ...props }) => (
+  <div
+    css={{
+      animation: `${shrinkKeyframes} ${autoDismissTimeout}ms linear`,
+      animationPlayState: isRunning ? 'running' : 'paused',
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      bottom: 0,
+      height: 0,
+      left: 0,
+      opacity,
+      position: 'absolute',
+      width: '100%',
+    }}
+    {...props}
+  />
+);
+
 const Icon = ({ appearance, autoDismiss, autoDismissTimeout, isRunning }) => {
   const meta = appearances[appearance];
   const Glyph = meta.icon;
@@ -125,6 +142,10 @@ const Icon = ({ appearance, autoDismiss, autoDismissTimeout, isRunning }) => {
     </div>
   );
 };
+
+// Transitions
+// ------------------------------
+
 function getTranslate(placement) {
   const pos = placement.split('-');
   const relevantPlacement = pos[1] === 'center' ? pos[0] : pos[1];
@@ -144,9 +165,16 @@ const toastStates = (placement: Placement) => ({
   exiting: { transform: getTranslate(placement) },
   exited: { transform: getTranslate(placement) },
 });
-const ToastElement = styled.div(
-  ({ appearance, placement, transitionDuration, transitionState }) => {
-    return {
+
+const ToastElement = ({
+  appearance,
+  placement,
+  transitionDuration,
+  transitionState,
+  ...props
+}) => (
+  <div
+    css={{
       backgroundColor: appearances[appearance].bg,
       borderRadius,
       boxShadow: '0 3px 8px rgba(0, 0, 0, 0.175)',
@@ -156,8 +184,9 @@ const ToastElement = styled.div(
       transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1)`,
       width: toastWidth,
       ...toastStates(placement)[transitionState],
-    };
-  }
+    }}
+    {...props}
+  />
 );
 
 // ==============================
