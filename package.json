@@ -26,6 +26,7 @@
     "prettier_lint": "prettier --list-different \"**/*.js\"",
     "eslint": "eslint .",
     "lint": "yarn prettier_lint && yarn eslint",
+    "typecheck": "flow check",
     "build": "NODE_ENV=production babel src -d dist --copy-files",
     "prepublishOnly": "npm run build",
     "build:examples": "webpack --mode production",
@@ -38,8 +39,7 @@
     "trailingComma": "es5"
   },
   "dependencies": {
-    "emotion": "^9.1.1",
-    "react-emotion": "^9.1.3",
+    "@emotion/core": "^10.0.14",
     "react-transition-group": "^2.3.1"
   },
   "devDependencies": {
@@ -47,7 +47,6 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^7.1.4",
-    "babel-plugin-emotion": "^9.1.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
@@ -61,7 +60,6 @@
     "raw-loader": "^0.5.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-emotion": "^9.1.3",
     "react-radios": "^1.1.0",
     "react-syntax-highlighter": "^7.0.4",
     "style-loader": "^0.21.0",

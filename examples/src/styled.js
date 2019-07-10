@@ -1,13 +1,14 @@
+/** @jsx jsx */
+
+import { jsx } from '@emotion/core';
 import React, { Component, Fragment } from 'react';
-import styled from 'react-emotion';
 import SyntaxHighlighter, {
   registerLanguage,
 } from 'react-syntax-highlighter/prism-light';
-import jsx from 'react-syntax-highlighter/languages/prism/jsx';
-import { coy } from 'react-syntax-highlighter/styles/prism';
+import jsxGrammar from 'react-syntax-highlighter/languages/prism/jsx';
 import * as colors from '../../src/colors';
 
-registerLanguage('jsx', jsx);
+registerLanguage('jsx', jsxGrammar);
 
 const gutter = 15;
 const containerWidth = 1140;
@@ -15,11 +16,6 @@ const containerWidth = 1140;
 // styled components
 // ------------------------------
 
-// const sections = {
-//   intro: { bg: 'white', text: 'inherit' },
-//   config: { bg: colors.N800, text: colors.N40 },
-//   example: { bg: colors.B500, text: colors.B50 },
-// };
 const sections = {
   intro: { bg: [colors.N10, colors.N20], text: 'inherit' },
   config: { bg: [colors.N700, colors.N800], text: 'white' },
@@ -44,14 +40,14 @@ export const Section = ({ area, ...props }) => {
 export const Container = props => (
   <div
     css={{
+      boxSizing: 'border-box',
       display: 'flex ',
       flexDirection: 'column',
-      minHeight: '100vh',
-      boxSizing: 'border-box',
       justifyContent: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
       maxWidth: containerWidth,
+      minHeight: '100vh',
       padding: '30px 15px',
 
       '@media (min-width: 480px)': {
@@ -82,34 +78,39 @@ const buttonBg = {
   snack: [colors.P300, colors.P400],
 };
 
-export const Button = styled.button(({ appearance, isDisabled }) => ({
-  background: `linear-gradient(to bottom right, ${buttonBg[appearance].join(
-    ','
-  )}) no-repeat left top`,
-  border: 0,
-  borderRadius: 4,
-  color: 'white',
-  cursor: 'pointer',
-  fontFamily: 'inherit',
-  fontSize: 'inherit',
-  paddingLeft: '1em',
-  paddingRight: '1em',
-  lineHeight: '2.2em',
-  pointerEvents: isDisabled ? 'none' : null,
-  opacity: isDisabled ? '0.5' : null,
-  transition:
-    'box-shadow 150ms cubic-bezier(0.2, 0, 0, 1), transform 150ms cubic-bezier(0.2, 0, 0, 1)',
+export const Button = ({ appearance, isDisabled, ...props }) => (
+  <button
+    css={{
+      background: `linear-gradient(to bottom right, ${buttonBg[appearance].join(
+        ','
+      )}) no-repeat left top`,
+      border: 0,
+      borderRadius: 4,
+      color: 'white',
+      cursor: 'pointer',
+      fontFamily: 'inherit',
+      fontSize: 'inherit',
+      lineHeight: '2.2em',
+      opacity: isDisabled ? '0.5' : null,
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      pointerEvents: isDisabled ? 'none' : null,
+      transition:
+        'box-shadow 150ms cubic-bezier(0.2, 0, 0, 1), transform 150ms cubic-bezier(0.2, 0, 0, 1)',
 
-  ':hover, :focus': {
-    outline: 0,
-    boxShadow: '0 2px 1px rgba(9, 30, 66, 0.13)',
-  },
-  ':hover': { transform: 'scale(1.03)' },
-  ':active': {
-    transform: 'scale(0.97)',
-    boxShadow: '0 0 0 rgba(9, 30, 66, 0.13)',
-  },
-}));
+      ':hover, :focus': {
+        outline: 0,
+        boxShadow: '0 2px 1px rgba(9, 30, 66, 0.13)',
+      },
+      ':hover': { transform: 'scale(1.03)' },
+      ':active': {
+        transform: 'scale(0.97)',
+        boxShadow: '0 0 0 rgba(9, 30, 66, 0.13)',
+      },
+    }}
+    {...props}
+  />
+);
 
 export const Repo = ({ isLocked, ...props }) => (
   <a
@@ -142,25 +143,40 @@ export const Repo = ({ isLocked, ...props }) => (
   ==============================
 */
 
-export const Footer = styled.footer({
-  color: '#97A0AF',
-  display: 'flex',
-  justifyContent: 'space-between',
-  fontSize: '0.85rem',
-});
-export const Header = styled.header({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-});
-export const Icon = styled.div({
-  fontSize: 32,
-  lineHeight: 1.2,
-  position: 'relative',
-  height: 32,
-  width: 32,
-  marginRight: '0.5em',
-});
+export const Footer = props => (
+  <footer
+    css={{
+      color: '#97A0AF',
+      display: 'flex',
+      fontSize: '0.85rem',
+      justifyContent: 'space-between',
+    }}
+    {...props}
+  />
+);
+export const Header = props => (
+  <header
+    css={{
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'space-between',
+    }}
+    {...props}
+  />
+);
+export const Icon = props => (
+  <div
+    css={{
+      fontSize: 32,
+      height: 32,
+      lineHeight: 1.2,
+      marginRight: '0.5em',
+      position: 'relative',
+      width: 32,
+    }}
+    {...props}
+  />
+);
 export const Title = ({ children, icon, tag: Tag = 'h2', ...props }) => (
   <Tag
     css={{
@@ -179,60 +195,81 @@ export const Title = ({ children, icon, tag: Tag = 'h2', ...props }) => (
     {children}
   </Tag>
 );
-export const ContentBlock = styled.div(({ align }) => {
+export const ContentBlock = ({ align, ...props }) => {
   const map = { left: 'paddingRight', right: 'paddingLeft' };
   const padding = map[align];
-  return {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'space-between',
 
-    [`@media (min-width: 740px)`]: {
-      [padding]: '2em',
-    },
-    [`@media (max-width: 739px)`]: {
-      paddingBottom: '2em',
-    },
-  };
-});
-export const StretchGroup = styled.div(({ reverse }) => ({
-  display: 'flex',
-  flex: 1,
-  flexDirection: reverse ? 'row-reverse' : 'row',
-  maxWidth: '100%',
+  return (
+    <div
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        justifyContent: 'space-between',
 
-  [`@media (min-width: 740px)`]: {
-    alignItems: 'stretch',
-  },
-  [`@media (max-width: 739px)`]: {
-    flexDirection: 'column',
-  },
-}));
-export const Code = styled.code({
-  // backgroundColor: 'rgba(0, 0, 0, 0.09)',
-  backgroundColor: '#FFEBE5',
-  borderRadius: '3px',
-  color: '#BF2600',
-  display: 'inline-block',
-  fontFamily: 'Monaco',
-  fontSize: '0.95em',
-  lineHeight: '1.2',
-  margin: '0 -0.2em',
-  padding: '0 0.2em',
-  position: 'relative',
-  zIndex: -1,
-});
+        [`@media (min-width: 740px)`]: {
+          [padding]: '2em',
+        },
+        [`@media (max-width: 739px)`]: {
+          paddingBottom: '2em',
+        },
+      }}
+      {...props}
+    />
+  );
+};
+export const StretchGroup = ({ reverse, ...props }) => (
+  <div
+    css={{
+      display: 'flex',
+      flex: 1,
+      flexDirection: reverse ? 'row-reverse' : 'row',
+      maxWidth: '100%',
+
+      [`@media (min-width: 740px)`]: {
+        alignItems: 'stretch',
+      },
+      [`@media (max-width: 739px)`]: {
+        flexDirection: 'column',
+      },
+    }}
+    {...props}
+  />
+);
+export const Code = props => (
+  <code
+    css={{
+      backgroundColor: '#FFEBE5',
+      borderRadius: '3px',
+      color: '#BF2600',
+      display: 'inline-block',
+      fontFamily: 'Monaco',
+      fontSize: '0.95em',
+      lineHeight: '1.2',
+      margin: '0 -0.2em',
+      padding: '0 0.2em',
+      position: 'relative',
+      zIndex: -1,
+    }}
+    {...props}
+  />
+);
 
 // Github Logo
 
-export const GithubAnchor = styled.a({
-  color: '#97A0AF',
-  transition: 'color 200ms',
-  ':hover, :focus': {
-    color: '#253858',
-  },
-});
+export const GithubAnchor = props => (
+  <a
+    css={{
+      color: '#97A0AF',
+      transition: 'color 200ms',
+
+      ':hover, :focus': {
+        color: '#253858',
+      },
+    }}
+    {...props}
+  />
+);
 export const GithubLogo = props => (
   <GithubAnchor {...props}>
     <svg

@@ -1,3 +1,6 @@
+/** @jsx jsx */
+
+import { jsx } from '@emotion/core';
 import React, { Component, Fragment, useState } from 'react';
 import { render } from 'react-dom';
 import { RadioGroup, Radio } from 'react-radios';
@@ -21,7 +24,7 @@ import {
 import CodeBlock from './CodeBlock';
 import './index.css';
 import ConnectivityListener from './ConnectivityListener';
-import { ToastProvider, ToastConsumer, withToastManager, useToasts } from '../../src';
+import { ToastProvider, ToastConsumer, useToasts } from '../../src';
 import * as colors from '../../src/colors';
 import exampleText from 'raw-loader!./raw/example';
 
@@ -88,7 +91,7 @@ const Snack = ({
 const exampleCode = ({
   appearance,
   autoDismiss,
-  pauseOnHover
+  pauseOnHover,
 }) => `import { useToasts } from 'react-toast-notifications'
 
 export const ToastDemo = ({ content }) => {
@@ -159,10 +162,7 @@ function Toasts() {
           Let users know what&apos;s happening in your app.
         </Title>
         <div css={{ marginBottom: '1em', marginTop: '1em' }}>
-          <RadioGroup
-            value={appearance}
-            onChange={handleAppearanceChange}
-          >
+          <RadioGroup value={appearance} onChange={handleAppearanceChange}>
             {appearances.map(a => (
               <label
                 key={a.value}
@@ -245,18 +245,7 @@ function App() {
               <span>by </span>
               <a href="https://twitter.com/jossmackison" target="_blank">
                 @jossmac
-              </a>{' '}
-              {/* <span>for </span>
-              <a href="http://keystonejs.com" target="_blank">
-                KeystoneJS
-              </a>{' '}
-              on{' '}
-              <a
-                href="https://www.npmjs.com/package/react-toast-notifications"
-                target="_blank"
-              >
-                npm
-              </a> */}
+              </a>
             </div>
             <div>
               paragraphs from{' '}
@@ -315,30 +304,16 @@ const App = () => (
 `}</CodeBlock>
               </StretchGroup>
             </Body>
-
-            {/* <Footer>
-            <div>
-              <span>by </span>
-              <a href="https://twitter.com/jossmackison" target="_blank">
-                @jossmac
-              </a>
-            </div>
-          </Footer> */}
           </Container>
         </ToastProvider>
       </Section>
       {/*
         ==============================
-        CONFIGURATION
+        EXAMPLE
         ==============================
       */}
       <Section area="example">
         <Container>
-          {/* <Repo href={repoUrl}>
-            <Icon role="img">🚀</Icon>
-            <span>Configuration</span>
-          </Repo> */}
-
           <Body>
             <StretchGroup>
               <ContentBlock align="left">

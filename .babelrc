@@ -3,13 +3,5 @@
   "plugins": ["transform-class-properties", "transform-object-rest-spread"],
   "ignore": [
     "examples/src/raw/*.js"
-  ],
-  "env": {
-    "production": {
-      "plugins": [["emotion", { "hoist": true }]]
-    },
-    "development": {
-      "plugins": [["emotion", { "sourceMap": true, "autoLabel": true }]]
-    }
-  }
+  ]
 }
