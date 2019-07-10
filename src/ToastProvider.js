@@ -199,5 +199,5 @@ export const withToastManager = (Comp: ComponentType<*>) =>
 export const useToasts = () => {
   const { add, remove, toasts } = useContext(ToastContext);
 
-  return { addToast: add, removeToast: remove, toasts };
+  return { addToast: add, removeToast: remove, toastStack: toasts };
 };

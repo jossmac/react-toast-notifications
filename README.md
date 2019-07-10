@@ -17,48 +17,29 @@ yarn add react-toast-notifications
 Wrap your app in the `ToastProvider`, which provides context for the `Toast` descendants.
 
 ```jsx
-import {
-  ToastConsumer,
-  ToastProvider,
-  withToastManager,
-} from 'react-toast-notifications';
-import validate from 'some-validation-lib';
+import { ToastProvider, useToasts } from 'react-toast-notifications'
 
-class FormComponent extends React.Component {
-  onSubmit = value => {
-    const { toastManager } = this.props;
-    const { error, success } = validate(value);
+const FormWithToasts = () => {
+  const { addToast } = useToasts()
+
+  const onSubmit = async value => {
+    const { error } = await dataPersistenceLayer(value)
 
     if (error) {
-      toastManager.add(`Something went wrong: "${error.message}"`, {
-        appearance: 'error',
-      });
-    } else if (success) {
-      toastManager.add('Saved Successfully', { appearance: 'success' });
+      addToast(error.message, { appearance: 'error' })
+    } else {
+      addToast('Saved Successfully', { appearance: 'success' })
     }
-  };
-  render() {
-    return <form onSubmit={this.onSubmit}>...</form>;
   }
-}
 
-// wrap your component to pass in the `toastManager` prop
-const FormWithToasts = withToastManager(FormComponent);
+  return <form onSubmit={onSubmit}>...</form>
+}
 
 const App = () => (
   <ToastProvider>
     <FormWithToasts />
-
-    {/* or if render props are more your speed */}
-    <ToastConsumer>
-      {({ add }) => (
-        <button onClick={e => add(`Notified by ${e.target}`)}>
-          Toasty
-        </button>
-      )}
-    </ToastConsumer>
   </ToastProvider>
-);
+)
 ```
 
 ## ToastProvider Props
@@ -82,26 +63,41 @@ For brevity:
 | ---------------------------------- | ------------------------------------------------------------------ |
 | appearance                         | Required. One of `success`, `error`, `warning`, `info`             |
 | children                           | Required. The content of the toast notification.                   |
-| autoDismiss `boolean`              | Whether or not to dismiss the toast automatically after a timeout. |
+| autoDismiss `boolean`              | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
 | onDismiss: `Id => void`          | Passed in dynamically.                                             |
-| pauseOnHover: `boolean`            | Whether or not to pause the timeout when hovered.                  |
+| pauseOnHover: `boolean`            | Default: `false`. Whether or not to pause the timeout when hovered.                  |
 | placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
 | transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
 | transitionState: `TransitionState` | Passed in dynamically.                                             |
 
-## Add & Remove
+## Hook
 
-The `add` method on `ToastManager` have three arguments:
+The `useToast` hook has the following signature:
+
+```jsx
+const { addToast, removeToast, toastStack } = useToasts();
+```
+
+The `addToast` method has three arguments:
 
 1.  The first is the content of the toast, which can be any renderable `Node`.
 1.  The second is the `Options` object, which can take any shape you like. `Options.appearance` is required when using the `DefaultToast`. When departing from the default shape, you must provide an alternative, compliant `Toast` component.
 1.  The third is an optional callback, which is passed the added toast `ID`.
 
-The `remove` method on `ToastManager` have two arguments:
+The `removeToast` method has two arguments:
 
 1.  The first is the `ID` of the toast to remove.
 1.  The second is an optional callback.
+
+The `toastStack` is an array of objects representing the current toasts, e.g.
+
+```jsx
+[
+  { content: 'Something went wrong', id: 'generated-string', appearance: 'error' },
+  { content: 'Item saved', id: 'generated-string', appearance: 'success' }
+]
+```
 
 ## Replaceable Components
 
