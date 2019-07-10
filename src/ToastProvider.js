@@ -125,7 +125,8 @@ export class ToastProvider extends Component<Props, State> {
     const { Toast, ToastContainer } = this.components;
     const { toasts } = this.state;
     const { add, remove } = this;
-    const containerStyles = toasts.length ? null : { pointerEvents: 'none' };
+
+    const hasToasts = Boolean(toasts.length);
 
     return (
       <Provider value={{ add, remove, toasts }}>
@@ -133,8 +134,8 @@ export class ToastProvider extends Component<Props, State> {
 
         {canUseDOM ? (
           createPortal(
-            <ToastContainer placement={placement} style={containerStyles}>
-              <TransitionGroup>
+            <ToastContainer placement={placement} hasToasts={hasToasts}>
+              <TransitionGroup component={null}>
                 {toasts.map(
                   ({
                     appearance,
@@ -177,7 +178,7 @@ export class ToastProvider extends Component<Props, State> {
             document.body
           )
         ) : (
-          <ToastContainer placement={placement} style={containerStyles} /> // keep ReactDOM.hydrate happy
+          <ToastContainer placement={placement} hasToasts={hasToasts} /> // keep ReactDOM.hydrate happy
         )}
       </Provider>
     );

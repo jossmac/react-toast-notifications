@@ -17,23 +17,31 @@ const placements = {
 
 export type ToastContainerProps = {
   children?: Node,
+  className?: string,
+  hasToasts: boolean,
   placement: Placement,
 };
 
 export const ToastContainer = ({
+  className,
+  hasToasts,
   placement,
   ...props
 }: ToastContainerProps) => (
   <div
-    css={{
-      boxSizing: 'border-box',
-      maxHeight: '100%',
-      overflowX: 'hidden',
-      overflowY: 'auto',
-      padding: gutter,
-      position: 'fixed',
-      ...placements[placement],
-    }}
+    css={[
+      {
+        boxSizing: 'border-box',
+        maxHeight: '100%',
+        overflowX: 'hidden',
+        overflowY: 'auto',
+        padding: gutter,
+        pointerEvents: hasToasts ? null : 'none',
+        position: 'fixed',
+        ...placements[placement],
+      },
+      className,
+    ]}
     {...props}
   />
 );

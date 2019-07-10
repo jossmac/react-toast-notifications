@@ -5,7 +5,7 @@ import type { Node } from 'react';
 export type Id = string;
 export type Callback = Id => void;
 export type Options = {
-  appearance?: 'error' | 'info' | 'success',
+  appearance?: 'error' | 'info' | 'success' | 'warning',
   autoDismiss?: boolean,
   onDismiss?: Callback,
   pauseOnHover?: boolean,
