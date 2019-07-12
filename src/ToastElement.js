@@ -1,7 +1,14 @@
 // @flow
 /** @jsx jsx */
 
-import React, { Children, Component, type Node } from 'react';
+import React, {
+  Children,
+  Component,
+  type Node,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { jsx, keyframes } from '@emotion/core';
 
 import { CheckIcon, FlameIcon, InfoIcon, CloseIcon, AlertIcon } from './icons';
@@ -162,8 +169,8 @@ export type TransitionState = 'entering' | 'entered' | 'exiting' | 'exited';
 const toastStates = (placement: Placement) => ({
   entering: { transform: getTranslate(placement) },
   entered: { transform: 'translate3d(0,0,0)' },
-  exiting: { transform: getTranslate(placement) },
-  exited: { transform: getTranslate(placement) },
+  exiting: { transform: 'scale(0.66)', opacity: 0 },
+  exited: { transform: 'scale(0.66)', opacity: 0 },
 });
 
 const ToastElement = ({
@@ -172,22 +179,32 @@ const ToastElement = ({
   transitionDuration,
   transitionState,
   ...props
-}) => (
-  <div
-    css={{
-      backgroundColor: appearances[appearance].bg,
-      borderRadius,
-      boxShadow: '0 3px 8px rgba(0, 0, 0, 0.175)',
-      color: appearances[appearance].text,
-      display: 'flex',
-      marginBottom: gutter,
-      transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1)`,
-      width: toastWidth,
-      ...toastStates(placement)[transitionState],
-    }}
-    {...props}
-  />
-);
+}) => {
+  return (
+    <div
+      // ref={elementRef}
+      // style={{ height }}
+      css={{
+        transition: `height ${transitionDuration - 100}ms 100ms`,
+      }}
+    >
+      <div
+        css={{
+          backgroundColor: appearances[appearance].bg,
+          borderRadius,
+          boxShadow: '0 3px 8px rgba(0, 0, 0, 0.175)',
+          color: appearances[appearance].text,
+          display: 'flex',
+          marginBottom: gutter,
+          transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1), opacity ${transitionDuration}ms`,
+          width: toastWidth,
+          ...toastStates(placement)[transitionState],
+        }}
+        {...props}
+      />
+    </div>
+  );
+};
 
 // ==============================
 // DefaultToast
