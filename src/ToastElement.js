@@ -180,10 +180,26 @@ const ToastElement = ({
   transitionState,
   ...props
 }) => {
+  const [height, setHeight] = useState('auto');
+  const elementRef = useRef(null);
+
+  useEffect(
+    () => {
+      if (transitionState === 'entered') {
+        const el = elementRef.current;
+        setHeight(el.offsetHeight + gutter);
+      }
+      if (transitionState === 'exiting') {
+        setHeight(0);
+      }
+    },
+    [transitionState]
+  );
+
   return (
     <div
-      // ref={elementRef}
-      // style={{ height }}
+      ref={elementRef}
+      style={{ height }}
       css={{
         transition: `height ${transitionDuration - 100}ms 100ms`,
       }}
