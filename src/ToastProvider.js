@@ -117,8 +117,8 @@ export class ToastProvider extends Component<Props, State> {
       transitionDuration,
     } = this.props;
     const { Toast, ToastContainer } = this.components;
-    const { toasts } = this.state;
     const { add, remove } = this;
+    const toasts = Object.freeze(this.state.toasts);
 
     const hasToasts = Boolean(toasts.length);
     const portalTarget = document && document.body; // appease flow
