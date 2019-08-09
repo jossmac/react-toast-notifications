@@ -31,6 +31,12 @@ import type {
 const ToastContext = React.createContext();
 const { Consumer, Provider } = ToastContext;
 
+const canUseDOM = !!(
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement
+);
+
 // Provider
 // ==============================
 
@@ -121,7 +127,7 @@ export class ToastProvider extends Component<Props, State> {
     const toasts = Object.freeze(this.state.toasts);
 
     const hasToasts = Boolean(toasts.length);
-    const portalTarget = document && document.body; // appease flow
+    const portalTarget = canUseDOM ? document.body : null; // appease flow
 
     return (
       <Provider value={{ add, remove, toasts }}>
