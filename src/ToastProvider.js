@@ -194,7 +194,7 @@ export const useToasts = () => {
   const ctx = useContext(ToastContext);
 
   if (!ctx) {
-    throw new Error(`The \`useToasts\` hook must be called from a descendent of the \`ToastProvider\`.`);
+    throw Error('The `useToasts` hook must be called from a descendent of the `ToastProvider`.');
   }
 
   return {
