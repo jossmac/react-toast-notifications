@@ -5,6 +5,7 @@ import React, {
   Children,
   Component,
   type Node,
+  type ElementRef,
   useEffect,
   useRef,
   useState,
@@ -179,9 +180,9 @@ const ToastElement = ({
   transitionDuration,
   transitionState,
   ...props
-}) => {
+}: *) => {
   const [height, setHeight] = useState('auto');
-  const elementRef = useRef(null);
+  const elementRef: ElementRef<*> = useRef(null);
 
   useEffect(
     () => {
@@ -235,7 +236,6 @@ export type ToastProps = {
   onDismiss: typeof NOOP,
   onMouseEnter: HoverFn,
   onMouseLeave: HoverFn,
-  pauseOnHover: boolean,
   placement: Placement,
   transitionDuration: number, // inherited from ToastProvider
   transitionState: TransitionState, // inherited from ToastProvider
@@ -248,7 +248,6 @@ export const DefaultToast = ({
   children,
   isRunning,
   onDismiss,
-  pauseOnHover,
   placement,
   transitionDuration,
   transitionState,

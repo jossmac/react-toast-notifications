@@ -31,12 +31,6 @@ import type {
 const ToastContext = React.createContext();
 const { Consumer, Provider } = ToastContext;
 
-const canUseDOM = !!(
-  typeof window !== 'undefined' &&
-  window.document &&
-  window.document.createElement
-);
-
 // Provider
 // ==============================
 
@@ -59,7 +53,7 @@ type Props = {
   transitionDuration: number,
 };
 type State = { toasts: ToastsType };
-type Context = { add: AddFn, remove: RemoveFn };
+type Context = { add: AddFn, remove: RemoveFn, toasts: Array<Object> };
 
 export class ToastProvider extends Component<Props, State> {
   components: Components;
@@ -127,12 +121,13 @@ export class ToastProvider extends Component<Props, State> {
     const { add, remove } = this;
 
     const hasToasts = Boolean(toasts.length);
+    const portalTarget = document && document.body; // appease flow
 
     return (
       <Provider value={{ add, remove, toasts }}>
         {children}
 
-        {canUseDOM ? (
+        {portalTarget ? (
           createPortal(
             <ToastContainer placement={placement} hasToasts={hasToasts}>
               <TransitionGroup component={null}>
@@ -143,7 +138,6 @@ export class ToastProvider extends Component<Props, State> {
                     content,
                     id,
                     onDismiss,
-                    pauseOnHover,
                     ...unknownConsumerProps
                   }) => (
                     <Transition
@@ -161,7 +155,6 @@ export class ToastProvider extends Component<Props, State> {
                           component={Toast}
                           key={id}
                           onDismiss={this.onDismiss(id, onDismiss)}
-                          pauseOnHover={pauseOnHover}
                           placement={placement}
                           transitionDuration={transitionDuration}
                           transitionState={transitionState}
@@ -175,7 +168,7 @@ export class ToastProvider extends Component<Props, State> {
                 )}
               </TransitionGroup>
             </ToastContainer>,
-            document.body
+            portalTarget
           )
         ) : (
           <ToastContainer placement={placement} hasToasts={hasToasts} /> // keep ReactDOM.hydrate happy
