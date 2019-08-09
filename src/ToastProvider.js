@@ -198,7 +198,15 @@ export const withToastManager = (Comp: ComponentType<*>) =>
   ));
 
 export const useToasts = () => {
-  const { add, remove, toasts } = useContext(ToastContext);
+  const ctx = useContext(ToastContext);
 
-  return { addToast: add, removeToast: remove, toastStack: toasts };
+  if (!ctx) {
+    throw new Error(`The \`useToasts\` hook must be called from a descendent of the \`ToastProvider\`.`);
+  }
+
+  return {
+    addToast: ctx.add,
+    removeToast: ctx.remove,
+    toastStack: ctx.toasts,
+  };
 };
