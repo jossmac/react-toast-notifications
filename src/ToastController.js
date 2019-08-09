@@ -21,7 +21,7 @@ const TimerType = {
 };
 
 function Timer(callback: () => void, delay: number) {
-  let timerId = delay;
+  let timerId: TimeoutID;
   let start = delay;
   let remaining = delay;
 
@@ -100,11 +100,10 @@ export class ToastController extends Component<Props, State> {
   render() {
     const { component: Toast, ...props } = this.props;
     const { autoDismissTimeout, isRunning } = this.state;
-    const hasMouseEvents = props.pauseOnHover && props.autoDismiss;
 
     // NOTE: conditions here so methods can be clean
-    const handleMouseEnter = hasMouseEvents ? this.onMouseEnter : NOOP;
-    const handleMouseLeave = hasMouseEvents ? this.onMouseLeave : NOOP;
+    const handleMouseEnter = props.autoDismiss ? this.onMouseEnter : NOOP;
+    const handleMouseLeave = props.autoDismiss ? this.onMouseLeave : NOOP;
 
     return (
       <Toast

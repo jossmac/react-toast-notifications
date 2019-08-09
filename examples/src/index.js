@@ -91,7 +91,6 @@ const Snack = ({
 const exampleCode = ({
   appearance,
   autoDismiss,
-  pauseOnHover,
 }) => `import { useToasts } from 'react-toast-notifications'
 
 export const ToastDemo = ({ content }) => {
@@ -100,7 +99,6 @@ export const ToastDemo = ({ content }) => {
     <Button onClick={() => addToast(content, {
       appearance: '${appearance}',
       autoDismiss: ${autoDismiss},
-      pauseOnHover: ${pauseOnHover},
     })}>
       Add Toast
     </Button>
@@ -147,10 +145,9 @@ const appearances = [
 function Toasts() {
   const [appearance, setAppearance] = useState(appearances[0].value);
   const [autoDismiss, setAutoDismiss] = useState(true);
-  const [pauseOnHover, setPauseOnHover] = useState(true);
   const { addToast } = useToasts();
 
-  const state = { appearance, autoDismiss, pauseOnHover };
+  const state = { appearance, autoDismiss };
   const toggleAutoDismiss = event => setAutoDismiss(event.target.checked);
   const add = () => addToast(getRandom(), state);
   const handleAppearanceChange = appearance => setAppearance(appearance);
@@ -199,18 +196,6 @@ function Toasts() {
             />
             <label htmlFor="auto-dismiss-checkbox">Auto-dismiss</label>
           </div>
-          {autoDismiss && (
-            <div css={{ fontSize: '0.85em', marginLeft: '0.5em' }}>
-              <input
-                id="pause-on-hover-checkbox"
-                type="checkbox"
-                onChange={() => setPauseOnHover(v => !v)}
-                style={{ marginRight: '0.5em' }}
-                checked={pauseOnHover}
-              />
-              <label htmlFor="pause-on-hover-checkbox">Pause on hover</label>
-            </div>
-          )}
         </div>
       </ContentBlock>
       <CodeBlock>{exampleCode(state)}</CodeBlock>

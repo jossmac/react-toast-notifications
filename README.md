@@ -66,7 +66,6 @@ For brevity:
 | autoDismiss `boolean`              | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
 | onDismiss: `Id => void`          | Passed in dynamically.                                             |
-| pauseOnHover: `boolean`            | Default: `false`. Whether or not to pause the timeout when hovered.                  |
 | placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
 | transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
 | transitionState: `TransitionState` | Passed in dynamically.                                             |
