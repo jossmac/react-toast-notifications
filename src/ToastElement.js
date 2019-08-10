@@ -253,6 +253,7 @@ export const DefaultToast = ({
   transitionState,
   onMouseEnter,
   onMouseLeave,
+  ...otherProps
 }: ToastProps) => (
   <ToastElement
     appearance={appearance}
@@ -261,6 +262,7 @@ export const DefaultToast = ({
     transitionDuration={transitionDuration}
     onMouseEnter={onMouseEnter}
     onMouseLeave={onMouseLeave}
+    {...otherProps}
   >
     <Icon
       appearance={appearance}
