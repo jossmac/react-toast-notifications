@@ -62,7 +62,6 @@ type State = { toasts: ToastsType };
 type Context = { add: AddFn, remove: RemoveFn, toasts: Array<Object> };
 
 export class ToastProvider extends Component<Props, State> {
-  components: Components;
   static defaultProps = {
     autoDismissTimeout: 5000,
     components: defaultComponents,
@@ -70,22 +69,7 @@ export class ToastProvider extends Component<Props, State> {
     transitionDuration: 220,
   };
 
-  constructor(props: Props) {
-    super(props);
-    this.cacheComponents(props.components);
-    this.state = { toasts: [] };
-  }
-  componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.components !== this.props.components) {
-      this.cacheComponents(nextProps.components);
-    }
-  }
-  cacheComponents = (components?: {}) => {
-    this.components = {
-      ...defaultComponents,
-      ...components,
-    };
-  };
+  state = { toasts: [] };
 
   add = (content: Node, options?: Options = {}, cb: Callback = NOOP) => {
     const id = generateUEID();
@@ -122,7 +106,7 @@ export class ToastProvider extends Component<Props, State> {
       placement,
       transitionDuration,
     } = this.props;
-    const { Toast, ToastContainer } = this.components;
+    const { Toast, ToastContainer } = { ...defaultComponents, ...components };
     const { add, remove } = this;
     const toasts = Object.freeze(this.state.toasts);
 
