@@ -69,6 +69,7 @@ For brevity:
 | placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
 | transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
 | transitionState: `TransitionState` | Passed in dynamically.                                             |
+| pauseOnHover: `boolean`            | Default: `false`. Hovering on the toast pauses the autoDismiss timeout|
 
 ## Hook
 
