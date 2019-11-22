@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.14",
-    "react-transition-group": "^2.3.1"
+    "react-transition-group": "^4.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
