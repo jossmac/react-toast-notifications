@@ -29,6 +29,7 @@ export const ToastContainer = ({
   ...props
 }: ToastContainerProps) => (
   <div
+    className="react-toast-notifications__container"
     css={{
       boxSizing: 'border-box',
       maxHeight: '100%',

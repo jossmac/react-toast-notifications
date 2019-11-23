@@ -75,6 +75,8 @@ export type AppearanceTypes = $Keys<typeof appearances>;
 
 const Button = props => (
   <div
+    role="button"
+    className="react-toast-notifications__toast__dismiss-button"
     css={{
       cursor: 'pointer',
       flexShrink: 0,
@@ -90,6 +92,7 @@ const Button = props => (
 
 const Content = props => (
   <div
+    className="react-toast-notifications__toast__content"
     css={{
       flexGrow: 1,
       fontSize: 14,
@@ -106,6 +109,7 @@ const Content = props => (
 // https://bugzilla.mozilla.org/show_bug.cgi?id=625289
 const Countdown = ({ autoDismissTimeout, opacity, isRunning, ...props }) => (
   <div
+    className="react-toast-notifications__toast__countdown"
     css={{
       animation: `${shrinkKeyframes} ${autoDismissTimeout}ms linear`,
       animationPlayState: isRunning ? 'running' : 'paused',
@@ -127,6 +131,7 @@ const Icon = ({ appearance, autoDismiss, autoDismissTimeout, isRunning }) => {
 
   return (
     <div
+      className="react-toast-notifications__toast__icon-wrapper"
       css={{
         backgroundColor: meta.fg,
         borderTopLeftRadius: borderRadius,
@@ -146,7 +151,10 @@ const Icon = ({ appearance, autoDismiss, autoDismissTimeout, isRunning }) => {
         autoDismissTimeout={autoDismissTimeout}
         isRunning={isRunning}
       />
-      <Glyph css={{ position: 'relative', zIndex: 1 }} />
+      <Glyph
+        className="react-toast-notifications__toast__icon"
+        css={{ position: 'relative', zIndex: 1 }}
+      />
     </div>
   );
 };
@@ -206,6 +214,7 @@ const ToastElement = ({
       }}
     >
       <div
+        className={`react-toast-notifications__toast react-toast-notifications__toast--${appearance}`}
         css={{
           backgroundColor: appearances[appearance].bg,
           borderRadius,
@@ -229,7 +238,7 @@ const ToastElement = ({
 
 export type ToastProps = {
   appearance: AppearanceTypes,
-  autoDismiss: boolean | number,
+  autoDismiss: boolean, // may be inherited from ToastProvider
   autoDismissTimeout: number, // inherited from ToastProvider
   children: Node,
   isRunning: boolean,
@@ -272,9 +281,9 @@ export const DefaultToast = ({
     />
     <Content>{children}</Content>
     {onDismiss ? (
-      <Button onClick={onDismiss} role="button">
-        <CloseIcon />
-        <A11yText>Close</A11yText>
+      <Button onClick={onDismiss}>
+        <CloseIcon className="react-toast-notifications__toast__dismiss-icon" />
+        <A11yText className="react-toast-notifications__toast__dismiss-text">Close</A11yText>
       </Button>
     ) : null}
   </ToastElement>
