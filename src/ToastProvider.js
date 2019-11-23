@@ -63,6 +63,7 @@ type Context = { add: AddFn, remove: RemoveFn, toasts: Array<Object> };
 
 export class ToastProvider extends Component<Props, State> {
   static defaultProps = {
+    autoDismiss: false,
     autoDismissTimeout: 5000,
     components: defaultComponents,
     placement: 'top-right',
@@ -100,6 +101,7 @@ export class ToastProvider extends Component<Props, State> {
 
   render() {
     const {
+      autoDismiss: inheritedAutoDismiss,
       autoDismissTimeout,
       children,
       components,
@@ -140,7 +142,7 @@ export class ToastProvider extends Component<Props, State> {
                       {transitionState => (
                         <ToastController
                           appearance={appearance}
-                          autoDismiss={autoDismiss}
+                          autoDismiss={autoDismiss !== undefined ? autoDismiss : inheritedAutoDismiss}
                           autoDismissTimeout={autoDismissTimeout}
                           component={Toast}
                           key={id}

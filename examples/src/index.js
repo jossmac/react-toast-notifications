@@ -247,7 +247,7 @@ function App() {
         ==============================
       */}
       <Section area="config">
-        <ToastProvider components={{ Toast: Snack }} placement="bottom-center">
+        <ToastProvider autoDismiss autoDismissTimeout={6000} components={{ Toast: Snack }} placement="bottom-center">
           <Container>
             <Body>
               <StretchGroup reverse>
@@ -265,7 +265,7 @@ function App() {
                           onClick={
                             toasts.length
                               ? null
-                              : () => add(getRandom(), { autoDismiss: 6000 })
+                              : () => add(getRandom())
                           }
                         >
                           Snackbar
@@ -275,12 +275,13 @@ function App() {
                   </div>
                 </ContentBlock>
                 <CodeBlock theme="dark">{`import { ToastProvider } from 'react-toast-notifications';
-import { MyCustomToast } from '../snackbar';
+import { Snack } from '../snackbar';
 
 const App = () => (
   <ToastProvider
+    autoDismiss
     autoDismissTimeout={6000}
-    components={{ Toast: MyCustomToast }}
+    components={{ Toast: Snack }}
     placement="bottom-center"
   >
     ...

@@ -9,7 +9,6 @@ export type Options = {
   appearance: AppearanceTypes,
   autoDismiss?: boolean,
   onDismiss?: Callback,
-  pauseOnHover?: boolean,
 };
 
 export type AddFn = (content: Node, options?: Options) => void;
