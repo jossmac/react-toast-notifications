@@ -7,10 +7,7 @@ import { NOOP } from './utils';
 import type { ToastProps } from './ToastElement';
 
 type Props = ToastProps & { component: ComponentType<ToastProps> };
-type State = {
-  autoDismissTimeout: number,
-  isRunning: boolean,
-};
+type State = { isRunning: boolean };
 
 const defaultAutoDismissTimeout = 5000;
 
@@ -46,23 +43,11 @@ function Timer(callback: () => void, delay: number) {
 export class ToastController extends Component<Props, State> {
   timeout: typeof TimerType;
   state = {
-    autoDismissTimeout: this.props.autoDismissTimeout,
     isRunning: Boolean(this.props.autoDismiss),
   };
   static defaultProps = {
     autoDismiss: false,
   };
-  static getDerivedStateFromProps({
-    autoDismiss,
-    autoDismissTimeout,
-  }: ToastProps) {
-    if (!autoDismiss) return null;
-
-    const timeout =
-      typeof autoDismiss === 'number' ? autoDismiss : autoDismissTimeout;
-
-    return { autoDismissTimeout: timeout };
-  }
 
   componentDidMount() {
     this.startTimer();
@@ -72,8 +57,7 @@ export class ToastController extends Component<Props, State> {
   }
 
   startTimer = () => {
-    const { autoDismiss, onDismiss } = this.props;
-    const { autoDismissTimeout } = this.state;
+    const { autoDismiss, autoDismissTimeout, onDismiss } = this.props;
 
     if (!autoDismiss) return;
 
@@ -98,15 +82,16 @@ export class ToastController extends Component<Props, State> {
   };
 
   render() {
-    const { component: Toast, ...props } = this.props;
-    const { autoDismissTimeout, isRunning } = this.state;
+    const { autoDismiss, autoDismissTimeout, component: Toast, ...props } = this.props;
+    const { isRunning } = this.state;
 
     // NOTE: conditions here so methods can be clean
-    const handleMouseEnter = props.autoDismiss ? this.onMouseEnter : NOOP;
-    const handleMouseLeave = props.autoDismiss ? this.onMouseLeave : NOOP;
+    const handleMouseEnter = autoDismiss ? this.onMouseEnter : NOOP;
+    const handleMouseLeave = autoDismiss ? this.onMouseLeave : NOOP;
 
     return (
       <Toast
+        autoDismiss={autoDismiss}
         autoDismissTimeout={autoDismissTimeout}
         isRunning={isRunning}
         onMouseEnter={handleMouseEnter}
