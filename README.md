@@ -63,7 +63,7 @@ For brevity:
 | ---------------------------------- | ------------------------------------------------------------------ |
 | appearance                         | Required. One of `success`, `error`, `warning`, `info`             |
 | children                           | Required. The content of the toast notification.                   |
-| autoDismiss `boolean`              | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. |
+| autoDismiss `boolean`              | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. Inherited from `ToastProvider` if not provided. |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
 | onDismiss: `Id => void`          | Passed in dynamically.                                             |
 | placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
@@ -75,7 +75,7 @@ For brevity:
 The `useToast` hook has the following signature:
 
 ```jsx
-const { addToast, removeToast, toastStack } = useToasts();
+const { addToast, removeToast, removeAllToasts, updateToast, toastStack } = useToasts();
 ```
 
 The `addToast` method has three arguments:
@@ -88,6 +88,14 @@ The `removeToast` method has two arguments:
 
 1.  The first is the `ID` of the toast to remove.
 1.  The second is an optional callback.
+
+The `removeAllToasts` method has no arguments.
+
+The `updateToast` method has three arguments:
+
+1.  The first is the `ID` of the toast to update.
+1.  The second is the `Options` object, which differs slightly from the add method because it accepts a `content` property.
+1.  The third is an optional callback, which is passed the updated toast `ID`.
 
 The `toastStack` is an array of objects representing the current toasts, e.g.
 
