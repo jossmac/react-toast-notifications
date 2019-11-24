@@ -63,6 +63,7 @@ type State = { toasts: ToastsType };
 type Context = {
   add: AddFn,
   remove: RemoveFn,
+  removeAll: () => void,
   update: UpdateFn,
   toasts: Array<Object>,
 };
