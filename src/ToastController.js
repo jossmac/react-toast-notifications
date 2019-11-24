@@ -52,6 +52,15 @@ export class ToastController extends Component<Props, State> {
   componentDidMount() {
     this.startTimer();
   }
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.autoDismiss !== this.props.autoDismiss) {
+      const startOrClear = this.props.autoDismiss
+        ? this.startTimer
+        : this.clearTimer;
+
+      startOrClear();
+    }
+  }
   componentWillUnmount() {
     this.clearTimer();
   }
@@ -65,8 +74,6 @@ export class ToastController extends Component<Props, State> {
     this.timeout = new Timer(onDismiss, autoDismissTimeout);
   };
   clearTimer = () => {
-    if (!this.props.autoDismiss) return;
-
     if (this.timeout) this.timeout.clear();
   };
 

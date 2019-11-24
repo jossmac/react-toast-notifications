@@ -11,7 +11,8 @@ export type Options = {
   onDismiss?: Callback,
 };
 
-export type AddFn = (content: Node, options?: Options) => void;
+export type AddFn = (content: Node, options?: Options) => Id;
+export type UpdateFn = (id: Id, options: Options) => void;
 export type RemoveFn = (id: Id) => void;
 
 export type HoverFn = () => void;

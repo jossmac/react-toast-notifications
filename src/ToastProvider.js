@@ -19,6 +19,7 @@ const defaultComponents = { Toast: DefaultToast, ToastContainer };
 import { generateUEID, NOOP } from './utils';
 import type {
   AddFn,
+  UpdateFn,
   RemoveFn,
   Callback,
   ToastsType,
@@ -59,7 +60,13 @@ type Props = {
   transitionDuration: number,
 };
 type State = { toasts: ToastsType };
-type Context = { add: AddFn, remove: RemoveFn, toasts: Array<Object> };
+type Context = {
+  add: AddFn,
+  remove: RemoveFn,
+  removeAll: () => void,
+  update: UpdateFn,
+  toasts: Array<Object>,
+};
 
 export class ToastProvider extends Component<Props, State> {
   static defaultProps = {
@@ -72,31 +79,81 @@ export class ToastProvider extends Component<Props, State> {
 
   state = { toasts: [] };
 
+  // Internal Helpers
+  // ------------------------------
+
+  has = (id) => {
+    if (!this.state.toasts.length) {
+      return false;
+    }
+
+    return Boolean(this.state.toasts.filter(t => t.id === id).length);
+  };
+  onDismiss = (id: Id, cb: Callback = NOOP) => () => {
+    cb(id);
+    this.remove(id);
+  };
+
+  // Public API
+  // ------------------------------
+
   add = (content: Node, options?: Options = {}, cb: Callback = NOOP) => {
-    const id = generateUEID();
+    const id = options.id || generateUEID();
     const callback = () => cb(id);
 
-    this.setState(state => {
-      const toasts = state.toasts.slice(0);
-      const toast = Object.assign({}, { content, id }, options);
+    // bail if a toast exists with this ID
+    if (this.has(id)) {
+      return;
+    }
 
-      toasts.push(toast);
+    // update the toast stack
+    this.setState(state => {
+      const newToast = { content, id, ...options };
+      const toasts = [...state.toasts, newToast];
 
       return { toasts };
     }, callback);
+
+    // consumer may want to do something with the generated ID (and not use the callback)
+    return id;
   };
   remove = (id: Id, cb: Callback = NOOP) => {
     const callback = () => cb(id);
+
+    // bail if NO toasts exists with this ID
+    if (!this.has(id)) {
+      return;
+    }
 
     this.setState(state => {
       const toasts = state.toasts.filter(t => t.id !== id);
       return { toasts };
     }, callback);
   };
+  removeAll = () => {
+    if (!this.state.toasts.length) {
+      return;
+    }
 
-  onDismiss = (id: Id, cb: Callback = NOOP) => () => {
-    cb(id);
-    this.remove(id);
+    this.state.toasts.forEach(t => this.remove(t.id))
+  };
+  update = (id: Id, options?: Options = {}, cb: Callback = NOOP) => {
+    const callback = () => cb(id);
+
+    // bail if NO toasts exists with this ID
+    if (!this.has(id)) {
+      return;
+    }
+
+    // update the toast stack
+    this.setState(state => {
+      const old = state.toasts;
+      const i = old.findIndex(t => t.id === id);
+      const updatedToast = { ...old[i], ...options };
+      const toasts = [ ...old.slice(0, i), updatedToast, ...old.slice(i + 1)];
+
+      return { toasts };
+    }, callback);
   };
 
   render() {
@@ -109,14 +166,14 @@ export class ToastProvider extends Component<Props, State> {
       transitionDuration,
     } = this.props;
     const { Toast, ToastContainer } = { ...defaultComponents, ...components };
-    const { add, remove } = this;
+    const { add, remove, removeAll, update } = this;
     const toasts = Object.freeze(this.state.toasts);
 
     const hasToasts = Boolean(toasts.length);
     const portalTarget = canUseDOM ? document.body : null; // appease flow
 
     return (
-      <Provider value={{ add, remove, toasts }}>
+      <Provider value={{ add, remove, removeAll, update, toasts }}>
         {children}
 
         {portalTarget ? (
@@ -192,6 +249,8 @@ export const useToasts = () => {
   return {
     addToast: ctx.add,
     removeToast: ctx.remove,
+    removeAllToasts: ctx.removeAll,
+    updateToast: ctx.update,
     toastStack: ctx.toasts,
   };
 };
