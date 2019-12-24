@@ -28,19 +28,19 @@ export const ToastContainer = ({
   placement,
   ...props
 }: ToastContainerProps) => (
-  <div
-    className="react-toast-notifications__container"
-    css={{
-      boxSizing: 'border-box',
-      maxHeight: '100%',
-      overflowX: 'hidden',
-      overflowY: 'auto',
-      padding: gutter,
-      pointerEvents: hasToasts ? null : 'none',
-      position: 'fixed',
-      zIndex: 1000,
-      ...placements[placement],
-    }}
-    {...props}
-  />
-);
+    <div
+      className="react-toast-notifications__container"
+      css={{
+        boxSizing: 'border-box',
+        maxHeight: '100%',
+        overflowX: 'hidden',
+        overflowY: 'hidden',
+        padding: gutter,
+        pointerEvents: hasToasts ? null : 'none',
+        position: 'fixed',
+        zIndex: 1000,
+        ...placements[placement],
+      }}
+      {...props}
+    />
+  );
