@@ -57,7 +57,6 @@ export interface Options {
     autoDismiss?: boolean;
     id?: string
     onDismiss?: (id: string) => void;
-    pauseOnHover?: boolean;
 }
 
 export type AddToast = (content: ReactNode, options?: Options, callback?: (id: string) => void) => void;
