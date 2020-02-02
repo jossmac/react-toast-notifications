@@ -33,8 +33,7 @@ export const ToastContainer = ({
     css={{
       boxSizing: 'border-box',
       maxHeight: '100%',
-      overflowX: 'hidden',
-      overflowY: 'auto',
+      overflow: 'hidden',
       padding: gutter,
       pointerEvents: hasToasts ? null : 'none',
       position: 'fixed',
