@@ -1,57 +1,37 @@
-import React, { Component } from 'react';
-import { withToastManager } from 'react-toast-notifications';
+export function useConnectivityListener() {
+  const { addToast, removeToast } = useToasts();
+  const [online, setOnline] = useState(
+    () => (typeof window === 'undefined' ? false : window.navigator.onLine)
+  );
+  const toastId = useRef(null);
 
-class ConnectivityListener extends Component {
-  state = { isOnline: window ? window.navigator.onLine : false };
+  // NOTE: online/offline event listeners omitted for brevity
 
-  // NOTE: add/remove event listeners omitted for brevity
+  useUpdateEffect(
+    () => {
+      function onlineCallback() {
+        removeToast(toastId.current);
+        toastId.current = null;
+      }
+      function offlineCallback(id) {
+        toastId.current = id;
+      }
 
-  onlineCallback = () => {
-    this.props.toastManager.remove(this.offlineToastId);
-    this.offlineToastId = null;
-  };
-  offlineCallback = id => {
-    this.offlineToastId = id;
-  }
+      const content = (
+        <>
+          <strong>{online ? 'Online' : 'Offline'}</strong>
+          <div>
+            {online
+              ? 'Editing is available again'
+              : 'Changes you make may not be saved'}
+          </div>
+        </>
+      );
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-    const { isOnline } = this.state;
+      const callback = online ? onlineCallback : offlineCallback;
 
-    if (prevState.isOnline !== isOnline) {
-      return { isOnline };
-    }
-
-    return null;
-  }
-  componentDidUpdate(props, state, snapshot) {
-    if (!snapshot) return;
-
-    const { toastManager } = props;
-    const { isOnline } = snapshot;
-
-    const content = (
-      <div>
-        <strong>{isOnline ? 'Online' : "Offline"}</strong>
-        <div>
-          {isOnline
-            ? 'Editing is available again'
-            : 'Changes you make may not be saved'}
-        </div>
-      </div>
-    );
-
-    const callback = isOnline
-      ? this.onlineCallback
-      : this.offlineCallback;
-
-    toastManager.add(content, {
-      appearance: 'info',
-      autoDismiss: isOnline,
-    }, callback);
-  }
-  render() {
-    return null;
-  }
+      addToast(content, { appearance: 'info', autoDismiss: online }, callback);
+    },
+    [online]
+  );
 }
-
-export default withToastManager(ConnectivityListener);

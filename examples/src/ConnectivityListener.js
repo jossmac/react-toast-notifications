@@ -1,71 +1,78 @@
-import React, { Component } from 'react';
-import { withToastManager } from '../../src';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { useToasts } from '../../src';
 
-class ConnectivityListener extends Component {
-  state = { isOnline: window ? window.navigator.onLine : false };
-  componentDidMount() {
-    window.addEventListener('online', this.onLine, false);
-    window.addEventListener('offline', this.offLine, false);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('online', this.onLine);
-    window.removeEventListener('offline', this.offLine);
-  }
-  onLine = () => {
-    this.setState({ isOnline: true });
-  };
-  offLine = () => {
-    this.setState({ isOnline: false });
-  };
+export const ConnectivityListener = () => {
+  useConnectivityListener();
+  return null;
+};
 
-  onlineCallback = () => {
-    this.props.toastManager.remove(this.offlineToastId);
-    this.offlineToastId = null;
-  };
-  offlineCallback = id => {
-    this.offlineToastId = id;
-  }
+export function useConnectivityListener() {
+  const { addToast, removeToast } = useToasts();
+  const [isOnline, setOnline] = useState(
+    window ? window.navigator.onLine : false
+  );
+  const toastId = useRef(null);
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-    const { isOnline } = this.state;
+  useEffect(() => {
+    const onlineHandler = () => setOnline(true);
+    const offlineHandler = () => setOnline(false);
 
-    if (prevState.isOnline !== isOnline) {
-      return { isOnline };
-    }
+    window.addEventListener('online', onlineHandler);
+    window.addEventListener('offline', offlineHandler);
 
-    return null;
-  }
-  componentDidUpdate(props, state, snapshot) {
-    if (!snapshot) return;
+    return () => {
+      window.removeEventListener('online', onlineHandler);
+      window.removeEventListener('offline', offlineHandler);
+    };
+  }, []);
 
-    const { toastManager } = props;
-    const { isOnline } = snapshot;
+  useUpdateEffect(
+    () => {
+      const content = (
+        <Fragment>
+          <strong>{isOnline ? 'Online' : 'Offline'}</strong>
+          <div>
+            {isOnline
+              ? 'Editing is available again'
+              : 'Changes you make may not be saved'}
+          </div>
+        </Fragment>
+      );
 
-    // prepare the content
-    const content = (
-      <div>
-        <strong>{isOnline ? 'Online' : "Offline"}</strong>
-        <div>
-          {isOnline
-            ? 'Editing is available again'
-            : 'Changes you make may not be saved'}
-        </div>
-      </div>
-    );
+      // remove the existing offline notification if it exists, otherwise store
+      // the added toast id for use later
+      const callback = isOnline
+        ? () => {
+            removeToast(toastId.current);
+            toastId.current = null;
+          }
+        : id => {
+            toastId.current = id;
+          };
 
-    // remove the existing offline notification if it exists, otherwise store
-    // the added toast id for use later
-    const callback = isOnline ? this.onlineCallback : this.offlineCallback;
-
-    // add the applicable toast
-    toastManager.add(content, {
-      appearance: 'info',
-      autoDismiss: isOnline,
-    }, callback);
-  }
-  render() {
-    return null;
-  }
+      // add the applicable toast
+      addToast(
+        content,
+        { appearance: 'info', autoDismiss: isOnline },
+        callback
+      );
+    },
+    [isOnline]
+  );
 }
 
-export default withToastManager(ConnectivityListener);
+/**
+ * A custom useEffect hook that only triggers on updates, not on initial mount
+ * @param {Function} effect
+ */
+function useUpdateEffect(effect, deps = []) {
+  const initialMount = useRef(true);
+
+  useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false;
+    } else {
+      effect();
+    }
+  }, deps);
+}

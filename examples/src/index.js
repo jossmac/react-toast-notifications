@@ -1,15 +1,13 @@
 /** @jsx jsx */
 
-import { jsx } from '@emotion/core';
-import React, { Component, Fragment, useState } from 'react';
+import { useState } from 'react';
 import { render } from 'react-dom';
 import { RadioGroup, Radio } from 'react-radios';
+import { jsx } from '@emotion/core';
 
 import {
-  Anchor,
   Body,
   Button,
-  Code,
   Container,
   ContentBlock,
   Section,
@@ -23,7 +21,7 @@ import {
 } from './styled';
 import CodeBlock from './CodeBlock';
 import './index.css';
-import ConnectivityListener from './ConnectivityListener';
+import { ConnectivityListener } from './ConnectivityListener';
 import { ToastProvider, ToastConsumer, useToasts } from '../../src';
 import * as colors from '../../src/colors';
 import exampleText from 'raw-loader!./raw/example';
@@ -35,7 +33,6 @@ const snackStates = {
   exited: { transform: 'translate3d(0, 120%, 0) scale(0.9)' },
 };
 const Snack = ({
-  appearance,
   children,
   transitionDuration,
   transitionState,
@@ -208,6 +205,7 @@ function Toasts() {
 
 function App() {
   const repoUrl = 'https://github.com/jossmac/react-toast-notifications';
+
   return (
     <ToastProvider>
       <ConnectivityListener />
@@ -247,7 +245,12 @@ function App() {
         ==============================
       */}
       <Section area="config">
-        <ToastProvider autoDismiss autoDismissTimeout={6000} components={{ Toast: Snack }} placement="bottom-center">
+        <ToastProvider
+          autoDismiss
+          autoDismissTimeout={6000}
+          components={{ Toast: Snack }}
+          placement="bottom-center"
+        >
           <Container>
             <Body>
               <StretchGroup reverse>
@@ -263,9 +266,7 @@ function App() {
                           appearance="snack"
                           isDisabled={toasts.length}
                           onClick={
-                            toasts.length
-                              ? null
-                              : () => add(getRandom())
+                            toasts.length ? null : () => add(getRandom())
                           }
                         >
                           Snackbar
