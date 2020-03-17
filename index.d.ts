@@ -67,7 +67,15 @@ export const DefaultToastContainer: ComponentType<ToastContainerProps>;
 export const DefaultToast: ComponentType<ToastProps>;
 export const ToastConsumer: ComponentType<ToastConsumerProps>;
 export const ToastProvider: ComponentType<ToastProviderProps>;
-export function withToastManager(...args: any[]): any;
+
+export interface ToastManagerProps {
+    toastManager: ToastConsumerContext;
+}
+
+export function withToastManager<OwnProps extends ToastManagerProps>(
+    Component: ComponentType<OwnProps>
+): ComponentType<Omit<OwnProps, keyof ToastManagerProps>>;
+
 export function useToasts(): {
     addToast: AddToast;
     removeToast: RemoveToast;
