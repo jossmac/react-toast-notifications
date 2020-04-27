@@ -52,6 +52,8 @@ For brevity:
 | Property                               | Description                                                                              |
 | -------------------------------------- | ---------------------------------------------------------------------------------------- |
 | autoDismissTimeout `number`            | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds. |
+| autoDismiss `boolean`                  | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. |
+
 | children `Node`                        | Required. Your app content.                                                              |
 | components `{ ToastContainer, Toast }` | Replace the underlying components.                                                       |
 | placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.            |
@@ -63,7 +65,7 @@ For brevity:
 | ---------------------------------- | ------------------------------------------------------------------ |
 | appearance                         | Required. One of `success`, `error`, `warning`, `info`             |
 | children                           | Required. The content of the toast notification.                   |
-| autoDismiss `boolean`              | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. Inherited from `ToastProvider` if not provided. |
+| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                    |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
 | onDismiss: `Id => void`          | Passed in dynamically.                                             |
 | placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
