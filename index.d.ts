@@ -36,6 +36,7 @@ export interface ToastConsumerProps {
 
 export interface ToastContainerProps {
     children: ReactNode;
+    className?: string;
     hasToasts: boolean;
     placement: Placement;
 }
