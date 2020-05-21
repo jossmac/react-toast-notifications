@@ -65,7 +65,7 @@ For brevity:
 | children                           | Required. The content of the toast notification.                   |
 | autoDismiss `boolean`              | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. Inherited from `ToastProvider` if not provided. |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
-| onDismiss: `Id => void`          | Passed in dynamically.                                             |
+| onDismiss: `Id => void`          | Passed in dynamically. Can be called in a custom toast to dismiss it.|
 | placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
 | transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
 | transitionState: `TransitionState` | Passed in dynamically.                                             |
