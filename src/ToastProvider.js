@@ -49,6 +49,8 @@ type Props = {
   // A convenience prop; the time until a toast will be dismissed automatically, in milliseconds.
   // Note that specifying this will override any defaults set on individual children Toasts.
   autoDismissTimeout: number,
+  // Whether or not to dismiss the toast automatically after autoDismissTimeout.
+  autoDismiss: false,
   // Unrelated app content
   children: Node,
   // Component replacement object
