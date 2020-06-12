@@ -30,10 +30,10 @@ const FormWithToasts = () => {
     } else {
       addToast('Saved Successfully', { appearance: 'success' })
     }
-  }
+  };
 
   return <form onSubmit={onSubmit}>...</form>
-}
+};
 
 const App = () => (
   <ToastProvider>
@@ -49,36 +49,43 @@ For brevity:
 - `PlacementType` is equal to `'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right'`.
 - `TransitionState` is equal to `'entering' | 'entered' | 'exiting' | 'exited'`.
 
-| Property                               | Description                                                                              |
-| -------------------------------------- | ---------------------------------------------------------------------------------------- |
-| autoDismissTimeout `number`            | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds. |
-| autoDismiss `boolean`                  | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. |
+| Property                    | Description                                                                              |
+| --------------------------- | ---------------------------------------------------------------------------------------- |
+| autoDismissTimeout `number` | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds. |
+| autoDismiss `boolean`       | Default: `false`. Whether or not to dismiss the toast automatically after a timeout.     |
 
-| children `Node`                        | Required. Your app content.                                                              |
-| components `{ ToastContainer, Toast }` | Replace the underlying components.                                                       |
-| placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.            |
-| transitionDuration `number`            | Default `220`. The duration of the CSS transition on the `Toast` component.              |
+| children `Node` | Required. Your app content. |
+| components `{ ToastContainer, Toast }` | Replace the underlying components. |
+| placement `PlacementType` | Default `top-right`. Where, in relation to the viewport, to place the toasts. |
+| transitionDuration `number` | Default `220`. The duration of the CSS transition on the `Toast` component. |
+| name `string` | Default `default`. Provide a unique name when using [Nested Providers](#nested-providers). |
 
 ## Toast Props
 
-| Property                           | Description                                                        |
-| ---------------------------------- | ------------------------------------------------------------------ |
-| appearance                         | Required. One of `success`, `error`, `warning`, `info`             |
-| children                           | Required. The content of the toast notification.                   |
-| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                    |
-| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
-| onDismiss: `Id => void`          | Passed in dynamically. Can be called in a custom toast to dismiss it.|
-| placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
-| transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
-| transitionState: `TransitionState` | Passed in dynamically.                                             |
+| Property                           | Description                                                           |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| appearance                         | Required. One of `success`, `error`, `warning`, `info`                |
+| children                           | Required. The content of the toast notification.                      |
+| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                       |
+| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                       |
+| onDismiss: `Id => void`            | Passed in dynamically. Can be called in a custom toast to dismiss it. |
+| placement `PlacementType`          | Inherited from `ToastProvider`.                                       |
+| transitionDuration `number`        | Inherited from `ToastProvider`.                                       |
+| transitionState: `TransitionState` | Passed in dynamically.                                                |
 
 ## Hook
 
 The `useToast` hook has the following signature:
 
 ```jsx
-const { addToast, removeToast, removeAllToasts, updateToast, toastStack } = useToasts();
+const { addToast, removeToast, removeAllToasts, updateToast, toastStack } = useToasts(options);
 ```
+
+`options` passed to `useToasts` are:
+
+| Option        | Description                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------ |
+| name `string` | Default `default`. Provide a unique name when using [Nested Providers](#nested-providers). |
 
 The `addToast` method has three arguments:
 
@@ -104,8 +111,8 @@ The `toastStack` is an array of objects representing the current toasts, e.g.
 ```jsx
 [
   { content: 'Something went wrong', id: 'generated-string', appearance: 'error' },
-  { content: 'Item saved', id: 'generated-string', appearance: 'success' }
-]
+  { content: 'Item saved', id: 'generated-string', appearance: 'success' },
+];
 ```
 
 ## Replaceable Components
@@ -134,6 +141,34 @@ export const MyCustomToast = ({ children, ...props }) => (
   <DefaultToast {...props}>
     <SomethingSpecial>{children}</SomethingSpecial>
   </DefaultToast>
+);
+```
+
+## Nested Providers
+
+Displaying individual toasts differently is done using nested `<ToastProvider>`s.
+
+For example, [the docs
+page](https://jossmac.github.io/react-toast-notifications) displays both
+"notification" style & "snack bar" style toasts simultaneously on the same page.
+
+Nested Providers must be given a unique `name` prop, which is then also passed
+to the `<ToastConsumer>` component or `useToasts()` hook.
+
+```jsx
+import { ToastProvider, ToastConsumer } from 'react-toast-notifications';
+
+const App = () => (
+  <ToastProvider>
+    <ToastProvider name="snack">
+      <ToastConsumer>
+        {({ add }) => <button onClick={() => add('A toast')}>Add Toast</button>}
+      </ToastConsumer>
+      <ToastConsumer name="snack">
+        {({ add }) => <button onClick={() => add('A snack')}>Add Snack</button>}
+      </ToastConsumer>
+    </ToastProvider>
+  </ToastProvider>
 );
 ```
 

@@ -208,49 +208,50 @@ function App() {
 
   return (
     <ToastProvider>
-      <ConnectivityListener />
-      <Section area="intro">
-        <Container>
-          <Header>
-            <Repo href={repoUrl}>
-              <Icon role="img">🍞</Icon>
-              <span>React Toast Notifications</span>
-            </Repo>
-            <GithubLogo href={repoUrl} target="_blank" />
-          </Header>
+      <ToastProvider
+        name="snack"
+        autoDismiss
+        autoDismissTimeout={6000}
+        components={{ Toast: Snack }}
+        placement="bottom-center"
+      >
+        <ConnectivityListener />
+        <Section area="intro">
+          <Container>
+            <Header>
+              <Repo href={repoUrl}>
+                <Icon role="img">🍞</Icon>
+                <span>React Toast Notifications</span>
+              </Repo>
+              <GithubLogo href={repoUrl} target="_blank" />
+            </Header>
 
-          <Body>
-            <Toasts />
-          </Body>
+            <Body>
+              <Toasts />
+            </Body>
 
-          <Footer>
-            <div>
-              <span>by </span>
-              <a href="https://twitter.com/jossmackison" target="_blank">
-                @jossmac
-              </a>
-            </div>
-            <div>
-              paragraphs from{' '}
-              <a href="http://www.cupcakeipsum.com" target="_blank">
-                Cupcake Ipsum
-              </a>{' '}
-            </div>
-          </Footer>
-        </Container>
-      </Section>
-      {/*
+            <Footer>
+              <div>
+                <span>by </span>
+                <a href="https://twitter.com/jossmackison" target="_blank">
+                  @jossmac
+                </a>
+              </div>
+              <div>
+                paragraphs from{' '}
+                <a href="http://www.cupcakeipsum.com" target="_blank">
+                  Cupcake Ipsum
+                </a>{' '}
+              </div>
+            </Footer>
+          </Container>
+        </Section>
+        {/*
         ==============================
         CONFIGURATION
         ==============================
       */}
-      <Section area="config">
-        <ToastProvider
-          autoDismiss
-          autoDismissTimeout={6000}
-          components={{ Toast: Snack }}
-          placement="bottom-center"
-        >
+        <Section area="config">
           <Container>
             <Body>
               <StretchGroup reverse>
@@ -260,7 +261,7 @@ function App() {
                     <p>
                       Replace or configure any part of the notification system.
                     </p>
-                    <ToastConsumer>
+                    <ToastConsumer name="snack">
                       {({ add, toasts }) => (
                         <Button
                           appearance="snack"
@@ -292,39 +293,42 @@ const App = () => (
               </StretchGroup>
             </Body>
           </Container>
-        </ToastProvider>
-      </Section>
-      {/*
+        </Section>
+        {/*
         ==============================
         EXAMPLE
         ==============================
       */}
-      <Section area="example">
-        <Container>
-          <Body>
-            <StretchGroup>
-              <ContentBlock align="left">
-                <Title>Let&apos;s get real.</Title>
-                <div>
-                  <p>
-                    You&apos;re probably not firing off notifications
-                    haphazardly, from some random buttons in your app.*
-                  </p>
-                  <p>
-                    To see an example of how you might use this IRL, toggle the{' '}
-                    <code>Offline</code> checkbox in the Network pane of your
-                    dev tools. If you're on mobile, just turn on flight-mode.
-                  </p>
-                  <p>
-                    <small>* It's totally cool if you are, no judgement.</small>
-                  </p>
-                </div>
-              </ContentBlock>
-              <CodeBlock>{exampleText}</CodeBlock>
-            </StretchGroup>
-          </Body>
-        </Container>
-      </Section>
+        <Section area="example">
+          <Container>
+            <Body>
+              <StretchGroup>
+                <ContentBlock align="left">
+                  <Title>Let&apos;s get real.</Title>
+                  <div>
+                    <p>
+                      You&apos;re probably not firing off notifications
+                      haphazardly, from some random buttons in your app.*
+                    </p>
+                    <p>
+                      To see an example of how you might use this IRL, toggle
+                      the <code>Offline</code> checkbox in the Network pane of
+                      your dev tools. If you're on mobile, just turn on
+                      flight-mode.
+                    </p>
+                    <p>
+                      <small>
+                        * It's totally cool if you are, no judgement.
+                      </small>
+                    </p>
+                  </div>
+                </ContentBlock>
+                <CodeBlock>{exampleText}</CodeBlock>
+              </StretchGroup>
+            </Body>
+          </Container>
+        </Section>
+      </ToastProvider>
     </ToastProvider>
   );
 }

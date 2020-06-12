@@ -16,7 +16,7 @@ import { ToastContainer, type ToastContainerProps } from './ToastContainer';
 import { type ToastProps, DefaultToast } from './ToastElement';
 const defaultComponents = { Toast: DefaultToast, ToastContainer };
 
-import { generateUEID, NOOP } from './utils';
+import { generateUEID, NOOP, omit } from './utils';
 import type {
   AddFn,
   UpdateFn,
@@ -28,9 +28,9 @@ import type {
   Id,
 } from './types';
 
-// $FlowFixMe `createContext`
-const ToastContext = React.createContext();
-const { Consumer, Provider } = ToastContext;
+const contexts = {};
+
+const DEFAULT_CONTEXT_NAME = 'default';
 
 const canUseDOM = !!(
   typeof window !== 'undefined' &&
@@ -60,8 +60,12 @@ type Props = {
   // A convenience prop; the duration of the toast transition, in milliseconds.
   // Note that specifying this will override any defaults set on individual children Toasts.
   transitionDuration: number,
+  name: string,
 };
-type State = { toasts: ToastsType };
+type State = {
+  toasts: ToastsType,
+  context: Object,
+};
 type Context = {
   add: AddFn,
   remove: RemoveFn,
@@ -72,6 +76,7 @@ type Context = {
 
 export class ToastProvider extends Component<Props, State> {
   static defaultProps = {
+    name: DEFAULT_CONTEXT_NAME,
     autoDismiss: false,
     autoDismissTimeout: 5000,
     components: defaultComponents,
@@ -79,12 +84,22 @@ export class ToastProvider extends Component<Props, State> {
     transitionDuration: 220,
   };
 
-  state = { toasts: [] };
+  constructor(props: Props) {
+    super(props);
+
+    contexts[props.name] = contexts[props.name] || React.createContext();
+    const context = contexts[props.name];
+
+    this.state = {
+      toasts: [],
+      context,
+    };
+  }
 
   // Internal Helpers
   // ------------------------------
 
-  has = (id) => {
+  has = (id: Id) => {
     if (!this.state.toasts.length) {
       return false;
     }
@@ -100,7 +115,7 @@ export class ToastProvider extends Component<Props, State> {
   // ------------------------------
 
   add = (content: Node, options?: Options = {}, cb: Callback = NOOP) => {
-    const id = options.id || generateUEID();
+    const id: Id = options.id || generateUEID();
     const callback = () => cb(id);
 
     // bail if a toast exists with this ID
@@ -110,7 +125,7 @@ export class ToastProvider extends Component<Props, State> {
 
     // update the toast stack
     this.setState(state => {
-      const newToast = { content, id, ...options };
+      const newToast = { content, id, ...omit(options, 'id') };
       const toasts = [...state.toasts, newToast];
 
       return { toasts };
@@ -151,7 +166,7 @@ export class ToastProvider extends Component<Props, State> {
     this.setState(state => {
       const old = state.toasts;
       const i = old.findIndex(t => t.id === id);
-      const updatedToast = { ...old[i], ...options };
+      const updatedToast = { ...old[i], ...omit(options, 'id') };
       const toasts = [ ...old.slice(0, i), updatedToast, ...old.slice(i + 1)];
 
       return { toasts };
@@ -173,6 +188,7 @@ export class ToastProvider extends Component<Props, State> {
 
     const hasToasts = Boolean(toasts.length);
     const portalTarget = canUseDOM ? document.body : null; // appease flow
+    const { Provider } = this.state.context;
 
     return (
       <Provider value={{ add, remove, removeAll, update, toasts }}>
@@ -229,20 +245,35 @@ export class ToastProvider extends Component<Props, State> {
   }
 }
 
-export const ToastConsumer = ({ children }: { children: Context => Node }) => (
-  <Consumer>{context => children(context)}</Consumer>
-);
+export const ToastConsumer = ({
+  name = DEFAULT_CONTEXT_NAME,
+  children,
+}: {
+  name: string,
+  children: Context => Node,
+}) => {
+  const context = contexts[name];
+  if (!context) {
+    throw Error('The `ToastConsumer` component must be nested as a descendent of the `ToastProvider`.');
+  }
+  const { Consumer } = context;
+  return <Consumer>{ctx => children(ctx)}</Consumer>;
+};
 
-export const withToastManager = (Comp: ComponentType<*>) =>
+export const withToastManager = (
+  Comp: ComponentType<*>,
+  { name = DEFAULT_CONTEXT_NAME }: { name: string } = {}
+) =>
   // $FlowFixMe `forwardRef`
   React.forwardRef((props: *, ref: Ref<*>) => (
-    <ToastConsumer>
+    <ToastConsumer name={name}>
       {context => <Comp toastManager={context} {...props} ref={ref} />}
     </ToastConsumer>
   ));
 
-export const useToasts = () => {
-  const ctx = useContext(ToastContext);
+export const useToasts = ({ name = DEFAULT_CONTEXT_NAME }: { name: string } = {}) => {
+  const context = contexts[name] || {};
+  const ctx = useContext(context);
 
   if (!ctx) {
     throw Error('The `useToasts` hook must be called from a descendent of the `ToastProvider`.');

@@ -6,3 +6,11 @@ export function generateUEID() {
   second = ('000' + second.toString(36)).slice(-3);
   return first + second;
 }
+export function omit(obj, keyToOmit) {
+  return Object.entries(obj).reduce((memo, [key, value]) => {
+    if (key !== keyToOmit) {
+      memo[key] = value;
+    }
+    return memo;
+  }, {});
+}

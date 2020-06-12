@@ -6,6 +6,7 @@ export type AppearanceTypes = 'error' | 'info' | 'success' | 'warning';
 export type Id = string;
 export type Callback = Id => void;
 export type Options = {
+  id?: Id,
   appearance: AppearanceTypes,
   autoDismiss?: boolean,
   onDismiss?: Callback,
@@ -25,5 +26,5 @@ export type Placement =
   | 'top-center'
   | 'top-right';
 
-export type ToastType = Options & { appearance: AppearanceTypes, content: Node, id: Id };
+export type ToastType = { content: Node, id: Id } & Options;
 export type ToastsType = Array<ToastType>;
