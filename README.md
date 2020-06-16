@@ -52,8 +52,7 @@ For brevity:
 | Property                               | Description                                                                              |
 | -------------------------------------- | ---------------------------------------------------------------------------------------- |
 | autoDismissTimeout `number`            | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds. |
-| autoDismiss `boolean`                  | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. |
-
+| autoDismiss `boolean`                  | Default: `false`. Whether or not to dismiss the toast automatically after a timeout.     |
 | children `Node`                        | Required. Your app content.                                                              |
 | components `{ ToastContainer, Toast }` | Replace the underlying components.                                                       |
 | placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.            |
@@ -61,16 +60,16 @@ For brevity:
 
 ## Toast Props
 
-| Property                           | Description                                                        |
-| ---------------------------------- | ------------------------------------------------------------------ |
-| appearance                         | Required. One of `success`, `error`, `warning`, `info`             |
-| children                           | Required. The content of the toast notification.                   |
-| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                    |
-| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
-| onDismiss: `Id => void`          | Passed in dynamically. Can be called in a custom toast to dismiss it.|
-| placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
-| transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
-| transitionState: `TransitionState` | Passed in dynamically.                                             |
+| Property                           | Description                                                          |
+| ---------------------------------- | -------------------------------------------------------------------- |
+| appearance                         | Required. One of `success`, `error`, `warning`, `info`               |
+| children                           | Required. The content of the toast notification.                     |
+| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                      |
+| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                      |
+| onDismiss: `Id => void`            | Passed in dynamically. Can be called in a custom toast to dismiss it.|
+| placement `PlacementType`          | Inherited from `ToastProvider`.                                      |
+| transitionDuration `number`        | Inherited from `ToastProvider`.                                      |
+| transitionState: `TransitionState` | Passed in dynamically.                                               |
 
 ## Hook
 
