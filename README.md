@@ -53,7 +53,6 @@ For brevity:
 | -------------------------------------- | ---------------------------------------------------------------------------------------- |
 | autoDismissTimeout `number`            | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds. |
 | autoDismiss `boolean`                  | Default: `false`. Whether or not to dismiss the toast automatically after a timeout. |
-
 | children `Node`                        | Required. Your app content.                                                              |
 | components `{ ToastContainer, Toast }` | Replace the underlying components.                                                       |
 | placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.            |
