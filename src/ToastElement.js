@@ -30,7 +30,7 @@ const A11yText = ({ tag: Tag, ...props }) => (
       border: 0,
       clip: 'rect(1px, 1px, 1px, 1px)',
       height: 1,
-      overflow: 'hidden',
+      overflow: 'hidden !important',
       padding: 0,
       position: 'absolute',
       whiteSpace: 'nowrap',
