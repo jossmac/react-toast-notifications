@@ -60,7 +60,7 @@ export interface Options {
     onDismiss?: (id: string) => void;
 }
 
-export type AddToast = (content: ReactNode, options?: Options, callback?: (id: string) => void) => void;
+export type AddToast = (content: ReactNode, options: Options, callback?: (id: string) => void) => void;
 
 export type RemoveToast = (id: string, callback?: (id: string) => void) => void;
 
