@@ -60,9 +60,17 @@ export interface Options {
     onDismiss?: (id: string) => void;
 }
 
+export interface UpdateOptions extends Options {
+    content?: ReactNode;
+}
+
 export type AddToast = (content: ReactNode, options?: Options, callback?: (id: string) => void) => void;
 
 export type RemoveToast = (id: string, callback?: (id: string) => void) => void;
+
+export type RemoveAllToasts = () => void;
+
+export type UpdateToast = (id: string, options?: UpdateOptions, callback?: (id: string) => void) => void;
 
 export const DefaultToastContainer: ComponentType<ToastContainerProps>;
 export const DefaultToast: ComponentType<ToastProps>;
@@ -72,9 +80,11 @@ export function withToastManager(...args: any[]): any;
 export function useToasts(): {
     addToast: AddToast;
     removeToast: RemoveToast;
+    removeAllToasts: RemoveAllToasts;
     toastStack: Array<{
         content: ReactNode;
         id: string;
         appearance: AppearanceTypes;
     }>;
+    updateToast: UpdateToast;
 };
