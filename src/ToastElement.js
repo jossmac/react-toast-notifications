@@ -20,7 +20,7 @@ import { NOOP } from './utils';
 // common
 export const borderRadius = 4;
 export const gutter = 8;
-export const toastWidth = 360;
+export const toastWidth = 300;
 export const shrinkKeyframes = keyframes`from { height: 100%; } to { height: 0% }`;
 
 // a11y helper
