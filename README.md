@@ -17,29 +17,29 @@ yarn add react-toast-notifications
 Wrap your app in the `ToastProvider`, which provides context for the `Toast` descendants.
 
 ```jsx
-import { ToastProvider, useToasts } from 'react-toast-notifications'
+import { ToastProvider, useToasts } from 'react-toast-notifications';
 
 const FormWithToasts = () => {
-  const { addToast } = useToasts()
+  const { addToast } = useToasts();
 
   const onSubmit = async value => {
-    const { error } = await dataPersistenceLayer(value)
+    const { error } = await dataPersistenceLayer(value);
 
     if (error) {
-      addToast(error.message, { appearance: 'error' })
+      addToast(error.message, { appearance: 'error' });
     } else {
-      addToast('Saved Successfully', { appearance: 'success' })
+      addToast('Saved Successfully', { appearance: 'success' });
     }
-  }
+  };
 
-  return <form onSubmit={onSubmit}>...</form>
-}
+  return <form onSubmit={onSubmit}>...</form>;
+};
 
 const App = () => (
   <ToastProvider>
     <FormWithToasts />
   </ToastProvider>
-)
+);
 ```
 
 ## ToastProvider Props
@@ -49,34 +49,41 @@ For brevity:
 - `PlacementType` is equal to `'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right'`.
 - `TransitionState` is equal to `'entering' | 'entered' | 'exiting' | 'exited'`.
 
-| Property                               | Description                                                                              |
-| -------------------------------------- | ---------------------------------------------------------------------------------------- |
-| autoDismissTimeout `number`            | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds. |
-| autoDismiss `boolean`                  | Default: `false`. Whether or not to dismiss the toast automatically after a timeout.     |
-| children `Node`                        | Required. Your app content.                                                              |
-| components `{ ToastContainer, Toast }` | Replace the underlying components.                                                       |
-| placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.            |
-| transitionDuration `number`            | Default `220`. The duration of the CSS transition on the `Toast` component.              |
+| Property                               | Description                                                                                |
+| -------------------------------------- | ------------------------------------------------------------------------------------------ |
+| autoDismissTimeout `number`            | Default `5000`. The time until a toast will be dismissed automatically, in milliseconds.   |
+| autoDismiss `boolean`                  | Default: `false`. Whether or not to dismiss the toast automatically after a timeout.       |
+| children `Node`                        | Required. Your app content.                                                                |
+| components `{ ToastContainer, Toast }` | Replace the underlying components.                                                         |
+| placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.              |
+| portalTargetSelector `string`          | Which element to attach the container's portal to. Uses `document.body` when not provided. |
+| transitionDuration `number`            | Default `220`. The duration of the CSS transition on the `Toast` component.                |
 
 ## Toast Props
 
-| Property                           | Description                                                        |
-| ---------------------------------- | ------------------------------------------------------------------ |
-| appearance                         | Required. One of `success`, `error`, `warning`, `info`             |
-| children                           | Required. The content of the toast notification.                   |
-| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                    |
-| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                    |
-| onDismiss: `Id => void`          | Passed in dynamically. Can be called in a custom toast to dismiss it.|
-| placement `PlacementType`          | Inherited from `ToastProvider`.                                    |
-| transitionDuration `number`        | Inherited from `ToastProvider`.                                    |
-| transitionState: `TransitionState` | Passed in dynamically.                                             |
+| Property                           | Description                                                           |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| appearance                         | Required. One of `success`, `error`, `warning`, `info`                |
+| children                           | Required. The content of the toast notification.                      |
+| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                       |
+| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                       |
+| onDismiss: `Id => void`            | Passed in dynamically. Can be called in a custom toast to dismiss it. |
+| placement `PlacementType`          | Inherited from `ToastProvider`.                                       |
+| transitionDuration `number`        | Inherited from `ToastProvider`.                                       |
+| transitionState: `TransitionState` | Passed in dynamically.                                                |
 
 ## Hook
 
 The `useToast` hook has the following signature:
 
 ```jsx
-const { addToast, removeToast, removeAllToasts, updateToast, toastStack } = useToasts();
+const {
+  addToast,
+  removeToast,
+  removeAllToasts,
+  updateToast,
+  toastStack,
+} = useToasts();
 ```
 
 The `addToast` method has three arguments:
@@ -102,9 +109,13 @@ The `toastStack` is an array of objects representing the current toasts, e.g.
 
 ```jsx
 [
-  { content: 'Something went wrong', id: 'generated-string', appearance: 'error' },
-  { content: 'Item saved', id: 'generated-string', appearance: 'success' }
-]
+  {
+    content: 'Something went wrong',
+    id: 'generated-string',
+    appearance: 'error',
+  },
+  { content: 'Item saved', id: 'generated-string', appearance: 'success' },
+];
 ```
 
 ## Replaceable Components

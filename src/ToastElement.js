@@ -222,6 +222,7 @@ const ToastElement = ({
           color: appearances[appearance].text,
           display: 'flex',
           marginBottom: gutter,
+          maxWidth: '100%',
           transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1), opacity ${transitionDuration}ms`,
           width: toastWidth,
           ...toastStates(placement)[transitionState],
@@ -283,7 +284,9 @@ export const DefaultToast = ({
     {onDismiss ? (
       <Button onClick={onDismiss}>
         <CloseIcon className="react-toast-notifications__toast__dismiss-icon" />
-        <A11yText className="react-toast-notifications__toast__dismiss-text">Close</A11yText>
+        <A11yText className="react-toast-notifications__toast__dismiss-text">
+          Close
+        </A11yText>
       </Button>
     ) : null}
   </ToastElement>
