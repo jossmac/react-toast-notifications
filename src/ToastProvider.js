@@ -49,14 +49,16 @@ type Props = {
   // A convenience prop; the time until a toast will be dismissed automatically, in milliseconds.
   // Note that specifying this will override any defaults set on individual children Toasts.
   autoDismissTimeout: number,
-  // Whether or not to dismiss the toast automatically after autoDismissTimeout.
-  autoDismiss: false,
+  // Whether or not to dismiss the toast automatically after `autoDismissTimeout`.
+  autoDismiss: boolean,
   // Unrelated app content
   children: Node,
   // Component replacement object
   components: Components,
   // Where, in relation to the viewport, to place the toasts
   placement: Placement,
+  // Which element to attach the container's portal to, defaults to the `body`.
+  portalTargetSelector?: string,
   // A convenience prop; the duration of the toast transition, in milliseconds.
   // Note that specifying this will override any defaults set on individual children Toasts.
   transitionDuration: number,
@@ -84,7 +86,7 @@ export class ToastProvider extends Component<Props, State> {
   // Internal Helpers
   // ------------------------------
 
-  has = (id) => {
+  has = (id: string) => {
     if (!this.state.toasts.length) {
       return false;
     }
@@ -100,7 +102,7 @@ export class ToastProvider extends Component<Props, State> {
   // ------------------------------
 
   add = (content: Node, options?: Options = {}, cb: Callback = NOOP) => {
-    const id = options.id || generateUEID();
+    const id = options.id ? options.id : generateUEID();
     const callback = () => cb(id);
 
     // bail if a toast exists with this ID
@@ -137,7 +139,7 @@ export class ToastProvider extends Component<Props, State> {
       return;
     }
 
-    this.state.toasts.forEach(t => this.remove(t.id))
+    this.state.toasts.forEach(t => this.remove(t.id));
   };
   update = (id: Id, options?: Options = {}, cb: Callback = NOOP) => {
     const callback = () => cb(id);
@@ -152,7 +154,7 @@ export class ToastProvider extends Component<Props, State> {
       const old = state.toasts;
       const i = old.findIndex(t => t.id === id);
       const updatedToast = { ...old[i], ...options };
-      const toasts = [ ...old.slice(0, i), updatedToast, ...old.slice(i + 1)];
+      const toasts = [...old.slice(0, i), updatedToast, ...old.slice(i + 1)];
 
       return { toasts };
     }, callback);
@@ -165,6 +167,7 @@ export class ToastProvider extends Component<Props, State> {
       children,
       components,
       placement,
+      portalTargetSelector,
       transitionDuration,
     } = this.props;
     const { Toast, ToastContainer } = { ...defaultComponents, ...components };
@@ -172,7 +175,11 @@ export class ToastProvider extends Component<Props, State> {
     const toasts = Object.freeze(this.state.toasts);
 
     const hasToasts = Boolean(toasts.length);
-    const portalTarget = canUseDOM ? document.body : null; // appease flow
+    const portalTarget = canUseDOM
+      ? portalTargetSelector
+        ? document.querySelector(portalTargetSelector)
+        : document.body
+      : null; // appease flow
 
     return (
       <Provider value={{ add, remove, removeAll, update, toasts }}>
@@ -201,7 +208,11 @@ export class ToastProvider extends Component<Props, State> {
                       {transitionState => (
                         <ToastController
                           appearance={appearance}
-                          autoDismiss={autoDismiss !== undefined ? autoDismiss : inheritedAutoDismiss}
+                          autoDismiss={
+                            autoDismiss !== undefined
+                              ? autoDismiss
+                              : inheritedAutoDismiss
+                          }
                           autoDismissTimeout={autoDismissTimeout}
                           component={Toast}
                           key={id}
@@ -245,7 +256,9 @@ export const useToasts = () => {
   const ctx = useContext(ToastContext);
 
   if (!ctx) {
-    throw Error('The `useToasts` hook must be called from a descendent of the `ToastProvider`.');
+    throw Error(
+      'The `useToasts` hook must be called from a descendent of the `ToastProvider`.'
+    );
   }
 
   return {
