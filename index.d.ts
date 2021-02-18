@@ -1,4 +1,4 @@
-import { ReactNode, ComponentType } from 'react';
+import { ReactNode, ComponentType, CSSProperties } from 'react';
 
 export type AppearanceTypes = 'error' | 'info' | 'success' | 'warning';
 
@@ -37,6 +37,7 @@ export interface ToastConsumerProps {
 export interface ToastContainerProps {
     children: ReactNode;
     className?: string;
+    style?: CSSProperties;
     hasToasts: boolean;
     placement: Placement;
 }
