@@ -51,7 +51,7 @@ export interface ToastProviderProps {
     };
     placement?: Placement;
     transitionDuration?: number;
-    portalTargetSelector: string;
+    portalTargetSelector?: string;
 }
 
 export interface Options {
