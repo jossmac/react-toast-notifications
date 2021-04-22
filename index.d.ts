@@ -55,10 +55,11 @@ export interface ToastProviderProps {
 }
 
 export interface Options {
-    appearance: AppearanceTypes;
+    appearance?: AppearanceTypes;
     autoDismiss?: boolean;
-    id?: string
+    id?: string;
     onDismiss?: (id: string) => void;
+    [key: string]: any;
 }
 
 export interface UpdateOptions extends Options {

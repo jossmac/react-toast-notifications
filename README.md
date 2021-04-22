@@ -61,16 +61,16 @@ For brevity:
 
 ## Toast Props
 
-| Property                           | Description                                                           |
-| ---------------------------------- | --------------------------------------------------------------------- |
-| appearance                         | Required. One of `success`, `error`, `warning`, `info`                |
-| children                           | Required. The content of the toast notification.                      |
-| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                       |
-| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                       |
-| onDismiss: `Id => void`            | Passed in dynamically. Can be called in a custom toast to dismiss it. |
-| placement `PlacementType`          | Inherited from `ToastProvider`.                                       |
-| transitionDuration `number`        | Inherited from `ToastProvider`.                                       |
-| transitionState: `TransitionState` | Passed in dynamically.                                                |
+| Property                           | Description                                                                                           |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| appearance                         | Only used when no custom toast components are provided. One of `success`, `error`, `warning`, `info`. |
+| children                           | Required. The content of the toast notification.                                                      |
+| autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                                                       |
+| autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                                                       |
+| onDismiss: `Id => void`            | Passed in dynamically. Can be called in a custom toast to dismiss it.                                 |
+| placement `PlacementType`          | Inherited from `ToastProvider`.                                                                       |
+| transitionDuration `number`        | Inherited from `ToastProvider`.                                                                       |
+| transitionState: `TransitionState` | Passed in dynamically.                                                                                |
 
 ## Hook
 
