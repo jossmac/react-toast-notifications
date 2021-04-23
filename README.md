@@ -63,7 +63,7 @@ For brevity:
 
 | Property                           | Description                                                                                           |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| appearance                         | Only used when no custom toast components are provided. One of `success`, `error`, `warning`, `info`. |
+| appearance | Used by the default toast. One of `success`, `error`, `warning`, `info`. |
 | children                           | Required. The content of the toast notification.                                                      |
 | autoDismiss `boolean`              | Inherited from `ToastProvider` if not provided.                                                       |
 | autoDismissTimeout `number`        | Inherited from `ToastProvider`.                                                                       |
