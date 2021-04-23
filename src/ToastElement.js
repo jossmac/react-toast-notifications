@@ -252,7 +252,7 @@ export type ToastProps = {
 };
 
 export const DefaultToast = ({
-  appearance,
+  appearance = 'info',
   autoDismiss,
   autoDismissTimeout,
   children,
