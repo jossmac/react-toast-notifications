@@ -62,6 +62,8 @@ type Props = {
   // A convenience prop; the duration of the toast transition, in milliseconds.
   // Note that specifying this will override any defaults set on individual children Toasts.
   transitionDuration: number,
+  // have the newest toast at the top of the stack 
+  newestOnTop: boolean
 };
 type State = { toasts: ToastsType };
 type Context = {
@@ -79,6 +81,7 @@ export class ToastProvider extends Component<Props, State> {
     components: defaultComponents,
     placement: 'top-right',
     transitionDuration: 220,
+    newestOnTop: false
   };
 
   state = { toasts: [] };
@@ -113,7 +116,7 @@ export class ToastProvider extends Component<Props, State> {
     // update the toast stack
     this.setState(state => {
       const newToast = { content, id, ...options };
-      const toasts = [...state.toasts, newToast];
+      const toasts = this.props.newestOnTop ? [newToast, ...state.toasts] : [...state.toasts, newToast];
 
       return { toasts };
     }, callback);
