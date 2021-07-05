@@ -55,15 +55,15 @@ type Props = {
   children: Node,
   // Component replacement object
   components: Components,
+  // have the newest toast at the top of the stack 
+  newestOnTop: boolean,
   // Where, in relation to the viewport, to place the toasts
   placement: Placement,
   // Which element to attach the container's portal to, defaults to the `body`.
   portalTargetSelector?: string,
   // A convenience prop; the duration of the toast transition, in milliseconds.
   // Note that specifying this will override any defaults set on individual children Toasts.
-  transitionDuration: number,
-  // have the newest toast at the top of the stack 
-  newestOnTop: boolean
+  transitionDuration: number
 };
 type State = { toasts: ToastsType };
 type Context = {
