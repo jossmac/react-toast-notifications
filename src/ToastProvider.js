@@ -55,6 +55,8 @@ type Props = {
   children: Node,
   // Component replacement object
   components: Components,
+  // When true, insert new toasts at the top of the stack
+  newestOnTop: boolean,
   // Where, in relation to the viewport, to place the toasts
   placement: Placement,
   // Which element to attach the container's portal to, defaults to the `body`.
@@ -77,6 +79,7 @@ export class ToastProvider extends Component<Props, State> {
     autoDismiss: false,
     autoDismissTimeout: 5000,
     components: defaultComponents,
+    newestOnTop: false,
     placement: 'top-right',
     transitionDuration: 220,
   };
@@ -113,7 +116,7 @@ export class ToastProvider extends Component<Props, State> {
     // update the toast stack
     this.setState(state => {
       const newToast = { content, id, ...options };
-      const toasts = [...state.toasts, newToast];
+      const toasts = this.props.newestOnTop ? [newToast, ...state.toasts] : [...state.toasts, newToast];
 
       return { toasts };
     }, callback);

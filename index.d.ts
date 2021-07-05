@@ -49,6 +49,7 @@ export interface ToastProviderProps {
         ToastContainer?: ComponentType<ToastContainerProps>;
         Toast?: ComponentType<ToastProps>;
     };
+    newestOnTop?: boolean;
     placement?: Placement;
     transitionDuration?: number;
     portalTargetSelector?: string;
