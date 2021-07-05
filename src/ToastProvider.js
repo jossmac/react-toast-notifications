@@ -81,7 +81,7 @@ export class ToastProvider extends Component<Props, State> {
     components: defaultComponents,
     newestOnTop: false,
     placement: 'top-right',
-    transitionDuration: 220
+    transitionDuration: 220,
   };
 
   state = { toasts: [] };
