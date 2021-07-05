@@ -63,7 +63,7 @@ type Props = {
   portalTargetSelector?: string,
   // A convenience prop; the duration of the toast transition, in milliseconds.
   // Note that specifying this will override any defaults set on individual children Toasts.
-  transitionDuration: number
+  transitionDuration: number,
 };
 type State = { toasts: ToastsType };
 type Context = {
