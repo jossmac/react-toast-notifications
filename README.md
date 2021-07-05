@@ -55,7 +55,7 @@ For brevity:
 | autoDismiss `boolean`                  | Default: `false`. Whether or not to dismiss the toast automatically after a timeout.       |
 | children `Node`                        | Required. Your app content.                                                                |
 | components `{ ToastContainer, Toast }` | Replace the underlying components.                                                         |
-| newestOnTop `boolean`                  | Default `false`. Whether to have the newest toast at the top or bottom of the toastStack.  |
+| newestOnTop `boolean`                  | Default `false`. When true, insert new toasts at the top of the stack.  |
 | placement `PlacementType`              | Default `top-right`. Where, in relation to the viewport, to place the toasts.              |
 | portalTargetSelector `string`          | Which element to attach the container's portal to. Uses `document.body` when not provided. |
 | transitionDuration `number`            | Default `220`. The duration of the CSS transition on the `Toast` component.                |
