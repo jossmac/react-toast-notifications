@@ -79,9 +79,9 @@ export class ToastProvider extends Component<Props, State> {
     autoDismiss: false,
     autoDismissTimeout: 5000,
     components: defaultComponents,
+    newestOnTop: false,
     placement: 'top-right',
-    transitionDuration: 220,
-    newestOnTop: false
+    transitionDuration: 220
   };
 
   state = { toasts: [] };
