@@ -55,7 +55,7 @@ type Props = {
   children: Node,
   // Component replacement object
   components: Components,
-  // have the newest toast at the top of the stack 
+  // When true, insert new toasts at the top of the stack
   newestOnTop: boolean,
   // Where, in relation to the viewport, to place the toasts
   placement: Placement,
