@@ -1,3 +1,11 @@
+# 🚨 Not Maintained
+
+This was a great project to learn from and fulfilled the requirements it set out to. Unfortunately, I can no-longer give this project the time it needs. Consider [react-hot-toast](https://github.com/timolins/react-hot-toast) as an alternative, or look at the source and make your own 🎉 (there really isn't much to it).
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+---
+
 <img align="right" src="https://user-images.githubusercontent.com/2730833/41197727-5e0b4d2e-6cab-11e8-9d0d-873d1f8ebced.png" alt="react-toast-notifications" />
 
 # React Toast Notifications
