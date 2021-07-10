@@ -1,4 +1,4 @@
-import { ReactNode, ComponentType } from 'react';
+import { ReactNode, ComponentType, DetailedHTMLProps, HTMLAttributes } from 'react';
 
 export type AppearanceTypes = 'error' | 'info' | 'success' | 'warning';
 
@@ -34,7 +34,7 @@ export interface ToastConsumerProps {
     children: (context: ToastConsumerContext) => ReactNode;
 }
 
-export interface ToastContainerProps {
+export interface ToastContainerProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     children: ReactNode;
     className?: string;
     hasToasts: boolean;
