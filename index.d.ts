@@ -47,7 +47,7 @@ export interface ToastProviderProps {
     children: ReactNode;
     components?: {
         ToastContainer?: ComponentType<ToastContainerProps>;
-        Toast?: ComponentType<ToastProps>;
+        Toast?: ComponentType<ToastProps | any>;
     };
     newestOnTop?: boolean;
     placement?: Placement;
