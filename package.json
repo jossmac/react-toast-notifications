@@ -1,6 +1,6 @@
 {
   "name": "@digitalnology-oss/react-toast-notifications",
-  "version": "2.5.1",
+  "version": "3.0.0-beta.0",
   "description": "A configurable, composable, toast notification system for react.",
   "main": "dist/index.js",
   "typings": "./index.d.ts",
