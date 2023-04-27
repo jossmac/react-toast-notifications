@@ -1,5 +1,5 @@
 {
-  "name": "react-toast-notifications",
+  "name": "@digitalnology-oss/react-toast-notifications",
   "version": "2.5.1",
   "description": "A configurable, composable, toast notification system for react.",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
   "homepage": "https://jossmac.github.io/react-toast-notifications",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jossmac/react-toast-notifications.git"
+    "url": "https://github.com/digitalnology/react-toast-notifications.git"
   },
   "bugs": {
     "url": "https://github.com/jossmac/react-toast-notifications/issues"
